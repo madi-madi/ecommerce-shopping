@@ -13,8 +13,29 @@
 
 
 
-Route::group(['prefix'=> 'admin', 'namespace'=>'Admin'], function(){
-	Route::get('/', function () {
-    return view('admin.home');
+// Route::group(['prefix'=> 'admin', 'namespace'=>'Admin'], function(){
+// 	Route::get('/', function () {
+//     return view('admin.home');
+// });
+// });
+Route::group(['middleware'=>'maintenance'],function(){
+
+Route::get('/', function () {
+    return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+
 });
+
+Route::get('maintenance',function(){
+        if (settings()->status == 'open') {
+            # code...
+            return redirect('/');
+        }
+	return view('style.maintenance');
+});
+
