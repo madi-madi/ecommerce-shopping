@@ -6,61 +6,68 @@
   </div>
   <!-- /.box-header -->
   <div class="box-body">
-    {!! Form::open(['url'=>aurl('settings'),'files'=>true]) !!}
+    {{-- {!! Form::open(['url'=>aurl('settings'),'files'=>true]) !!} --}}
+    <form method="POST" action="http://127.0.0.1:8000/admin/settings" accept-charset="UTF-8" enctype="multipart/form-data" id="settings" v-on:submit.prevent="updateSettings()">
     <div class="form-group">
-      {!! Form::label('site_name_ar',trans('admin.site_name_ar')) !!}
-      {!! Form::text('site_name_ar',settings()->site_name_ar,['class'=>'form-control']) !!}
+      <label for="site_name_ar">{{trans('admin.site_name_ar')}}</label>
+      <input name="site_name_ar" type="text" v-model="settings.site_name_ar" id="site_name_ar" class="form-control">
     </div>
     <div class="form-group">
-      {!! Form::label('site_name_en',trans('admin.site_name_en')) !!}
-      {!! Form::text('site_name_en',settings()->site_name_en,['class'=>'form-control']) !!}
+      <label for="site_name_en">{{trans('admin.site_name_en')}}</label>
+      <input name="site_name_en" type="text" v-model="settings.site_name_en" id="site_name_en" class="form-control">
     </div>
     <div class="form-group">
-      {!! Form::label('site_email',trans('admin.site_email')) !!}
-      {!! Form::email('site_email',settings()->site_email,['class'=>'form-control']) !!}
+      <label for="site_email">{{trans('admin.site_email')}}</label>
+      <input name="site_email" type="text" v-model="settings.site_email" id="site_email" class="form-control">
     </div>
     <div class="form-group">
+      <label for="logo">{{trans('admin.logo')}}</label>
+      <input name="logo" type="file" ref="logo" id="logo" class="form-control">
 
-      {!! Form::label('logo',trans('admin.logo')) !!}
-      {!! Form::file('logo',['class'=>'form-control']) !!}
-      @if(!empty(settings()->logo))
+      {{-- @if(!empty(settings()->logo)) --}}
 
-      <img src="{{Storage::url(settings()->logo)}}"  class="img-responsive" alt="{{trans('admin.logo')}}" height="50px" width="50px" />
-      @endif
+      <img :src="'/storage/'+settings.logo"  class="img-responsive" alt="{{trans('admin.logo')}}" height="50px" width="50px" />
+      {{-- @endif --}}
 
     </div>
     <div class="form-group">
-
-      {!! Form::label('icon',trans('admin.icon')) !!}
-      {!! Form::file('icon',['class'=>'form-control']) !!}
+      <label for="icon">{{trans('admin.icon')}}</label>
+      <input name="icon" type="file" ref="icon" id="icon" class="form-control">
       @if(!empty(settings()->icon))
 
-      <img src="{{Storage::url(settings()->icon)}}"  class="img-responsive" alt="{{trans('admin.icon')}}" height="50px" width="50px" />
+      <img :src="'/storage/'+settings.icon"  class="img-responsive" alt="{{trans('admin.icon')}}" height="50px" width="50px" />
       @endif
 
     </div>
     <div class="form-group">
-      {!! Form::label('description',trans('admin.description')) !!}
-      {!! Form::textarea('description',settings()->description,['class'=>'form-control']) !!}
+      <label for="description">{{trans('admin.description')}}</label>
+      <textarea name="description" v-model="settings.description" id="description" class="form-control"> </textarea>
     </div>
     <div class="form-group">
-      {!! Form::label('keywords',trans('admin.keywords')) !!}
-      {!! Form::textarea('keywords',settings()->keywords,['class'=>'form-control']) !!}
+      <label for="keywords">{{trans('admin.keywords')}}</label>
+      <textarea name="keywords" v-model="settings.keywords" id="keywords" class="form-control"> </textarea>
     </div>
     <div class="form-group">
-      {!! Form::label('main_lang',trans('admin.main_lang')) !!}
-      {!! Form::select('main_lang',['ar'=>trans('admin.ar'),'en'=>trans('admin.en')],settings()->main_lang,['class'=>'form-control']) !!}
+      <label for="main_lang">{{trans('admin.main_lang')}}</label>
+      <select v-model="settings.main_lang" class="form-control" id="main_lang">
+         <option disabled value="">{{trans('admin.please_select_one')}}</option>
+         <option value="en">{{trans('admin.en')}}</option>
+         <option value="ar">{{trans('admin.ar')}}</option>
+       </select>
     </div>
      <div class="form-group">
-      {!! Form::label('status',trans('admin.status')) !!}
-      {!! Form::select('status',['open'=>trans('admin.open'),'close'=>trans('admin.close')],settings()->status,['class'=>'form-control']) !!}
+      <label for="status">{{trans('admin.status')}}</label>
+      <select v-model="settings.status" class="form-control" id="status">
+         <option disabled value="">{{trans('admin.please_select_one')}}</option>
+         <option value="open">{{trans('admin.open')}}</option>
+         <option value="close">{{trans('admin.close')}}</option>
+       </select>
     </div>
     <div class="form-group">
-      {!! Form::label('message_maintenance',trans('admin.message_maintenance')) !!}
-      {!! Form::textarea('message_maintenance',settings()->message_maintenance,['class'=>'form-control']) !!}
+      <label for="message_maintenance">{{trans('admin.message_maintenance')}}</label>
+      <textarea name="message_maintenance" v-model="settings.message_maintenance" id="message_maintenance" class="form-control"> </textarea>
     </div>
-    {!! Form::submit(trans('admin.save'),['class'=>'btn btn-primary']) !!}
-    {!! Form::close() !!}
+    <button type="submit" class="btn btn-primary">{{trans('admin.save')}}</button>
   </div>
   <!-- /.box-body -->
 </div>

@@ -5,18 +5,32 @@ use App\Http\Controllers\Controller;
 use App\Setting;
 use Illuminate\Http\Request;
 use Storage;
-use App\Http\Controllers\Upload;
+use Upload;
+
+
 class SettingsController extends Controller
 {
+   public static $settings = Null;
+    public function __construct()
+    {
+        if (self::$settings == Null) {
+            self::$settings = new Setting;
+            // dd($settings->orderBy('id','desc')->first());
+        }
+    }
     public function settings()
     {
+        if (request()->ajax()) {
+            $settings = self::$settings->orderBy('id','desc')->first();
+         return response($settings);   
+        }
 
         return view('admin.settings',['title'=> trans('admin.settings')]);
     }
 
     public function settings_save()
     {
-        $data = request()->except(['_token','_method']);
+        $data = request()->all();
 
     $this->validate(request(),[
             'logo'=>v_image(),
@@ -37,7 +51,7 @@ class SettingsController extends Controller
         ]
     );
         if (request()->hasFile('logo')) {
-            !empty(settings()->logo) ? Storage::delete(settings()->logo) : '';
+            !empty(settings()->logo) ? Storage::delete('public/'.settings()->logo) : '';
 
             $data['logo'] = Upload::upload([
                            // 'new_name'=>'',
@@ -51,7 +65,7 @@ class SettingsController extends Controller
 
         if (request()->hasFile('icon')) {
 
-            !empty(settings()->icon) ? Storage::delete(settings()->icon) : '';
+            !empty(settings()->icon) ? Storage::delete('public/'.settings()->icon) : '';
             $data['icon'] = Upload::upload([
                            // 'new_name'=>'',
                             'file'=>'icon',

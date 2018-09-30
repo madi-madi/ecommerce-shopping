@@ -1,3 +1,4 @@
+
 <?php
 
 /*
@@ -23,6 +24,8 @@ Route::group(['middleware'=>'maintenance'],function(){
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('verifyEmailFirst','Auth\RegisterController@verifyEmailFirst')->name('verifyEmailFirst');
+Route::get('verification/{email}/{verifyToken}','Auth\RegisterController@verificationDone')->name('verification');
 
 Auth::routes();
 

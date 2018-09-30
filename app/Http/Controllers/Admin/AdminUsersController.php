@@ -1,17 +1,54 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use App\User;
 
 class AdminUsersController extends Controller
 {
-    */
-    public function index(UsersDatatable $users)
+    public static $user = Null;
+    public function __construct()
     {
-        return $users->render('admin.userstables.index', ['title'=>trans('admin.user_title')]);
+        if (self::$user == Null) {
+            self::$user = new User;
+        }
+    }
+ 
+    public function index()
+    {
+        if (request()->ajax()) {
+        # code...
+        $users = self::$user->withTrashed()->paginate(10);
+        return response($users);
+
+        }
+
+        return view ('admin.users', ['title'=>trans('admin.user_title')]);
     }
 
+    public function deleteUser($id)
+    {
+        // find user 
+        $userDelete = self::$user->find($id);
+        //  delet User
+        $userDelete->delete();
+    }
+    public function restoreUser($id)
+    {
+        // find user 
+        $userRestore = self::$user->onlyTrashed()->find($id);
+        //  restore  User
+        $userRestore->restore();   
+    }
+    public function deleteforeverUser($id)
+    {
+        // find user 
+        $deletForever = self::$user->onlyTrashed()->find($id);
+        //  delete for ever  User
+        $deletForever->forceDelete(); 
+    }
     /**
      * Show the form for creating a new resource.
      *

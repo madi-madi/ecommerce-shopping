@@ -13879,13 +13879,17 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(12);
-module.exports = __webpack_require__(43);
+module.exports = __webpack_require__(45);
 
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_native_toast__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_native_toast___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_native_toast__);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -13895,7 +13899,13 @@ module.exports = __webpack_require__(43);
 
 __webpack_require__(13);
 
-window.Vue = __webpack_require__(36);
+
+window.Vue = __webpack_require__(38);
+// register the plugin on vue
+
+
+// you can also pass options, check options reference below
+// Vue.use(Toasted, Options)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -13903,10 +13913,92 @@ window.Vue = __webpack_require__(36);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', __webpack_require__(39));
+Vue.component('pagination-component', __webpack_require__(41));
 
 var app = new Vue({
-  el: '#app'
+    el: '#app',
+    data: {
+        users: {
+            total: 0,
+            per_page: 2,
+            from: 1,
+            to: 0,
+            current_page: 1
+        },
+        offset: 4,
+        settings: []
+    },
+    created: function created() {
+        this.getSettings();
+    },
+    mounted: function mounted() {
+        this.getUsers();
+    },
+
+    methods: {
+        getUsers: function getUsers() {
+            var _this = this;
+
+            axios.get('/admin/users?page=' + this.users.current_page).then(function (response) {
+                _this.users = response.data;
+            }).catch(function () {
+                console.log('handle server error from here');
+            });
+        },
+        deleteUser: function deleteUser(user, index) {
+            // console.info(user + index );
+            axios.delete('user/delete/' + user.id).then(function (response) {
+                console.info(response);
+                app.getUsers();
+            }).catch(function (error) {
+                __WEBPACK_IMPORTED_MODULE_0_native_toast___default()({
+                    message: 'Access denied',
+                    // position: 'north-east',
+                    // Self destroy in 5 seconds
+                    timeout: 4000,
+                    type: 'warning'
+                });
+                // or nativeToast.warning(options)
+            });
+        },
+        restoreUser: function restoreUser(user, index) {
+            // console.info(user + index );
+            axios.delete('user/restore/' + user.id).then(function (response) {
+                console.info(response);
+                app.getUsers();
+            }).catch(function (error) {
+                console.error(error.type);
+            });
+        },
+        deleteforeverUser: function deleteforeverUser(user, index) {
+            // console.info(user + index );
+            axios.delete('user/deleteforever/' + user.id).then(function (response) {
+                console.info(response);
+                app.getUsers();
+            }).catch(function (error) {
+                console.error(error.type);
+            });
+        },
+        updateSettings: function updateSettings() {
+            var formData = new FormData(document.getElementById('settings'));
+            axios.post('settings', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+
+                }
+            }).then(function (response) {
+                app.settings = response.data;
+            }).catch(function (error) {});
+
+            console.info('Test function colective');
+        },
+        getSettings: function getSettings() {
+            axios.get('settings').then(function (response) {
+                console.log(response.data);
+                app.settings = response.data;
+            }).catch(function (error) {});
+        }
+    }
 });
 
 /***/ }),
@@ -35956,6 +36048,158 @@ module.exports = function spread(callback) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var assign = _interopDefault(__webpack_require__(37));
+
+var prevToast = null;
+var icons = {
+  warning: "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-alert-circle\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><line x1=\"12\" y1=\"8\" x2=\"12\" y2=\"12\"></line><line x1=\"12\" y1=\"16\" x2=\"12\" y2=\"16\"></line></svg>",
+  success: "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-check-circle\"><path d=\"M22 11.08V12a10 10 0 1 1-5.93-9.14\"></path><polyline points=\"22 4 12 14.01 9 11.01\"></polyline></svg>",
+  info: "<svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" fill=\"none\" stroke=\"currentcolor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"6.25%\"><path d=\"M16 14 L16 23 M16 8 L16 10\" /><circle cx=\"16\" cy=\"16\" r=\"14\" /></svg>",
+  error: "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-alert-triangle\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"></path><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"></line><line x1=\"12\" y1=\"17\" x2=\"12\" y2=\"17\"></line></svg>"
+};
+
+var Toast = function Toast(ref) {
+  var this$1 = this;
+  if ( ref === void 0 ) ref = {};
+  var message = ref.message; if ( message === void 0 ) message = '';
+  var position = ref.position; if ( position === void 0 ) position = 'south-east';
+  var timeout = ref.timeout; if ( timeout === void 0 ) timeout = 3000;
+  var el = ref.el; if ( el === void 0 ) el = document.body;
+  var rounded = ref.rounded; if ( rounded === void 0 ) rounded = false;
+  var type = ref.type; if ( type === void 0 ) type = '';
+  var debug = ref.debug; if ( debug === void 0 ) debug = false;
+  var edge = ref.edge; if ( edge === void 0 ) edge = false;
+  var icon = ref.icon; if ( icon === void 0 ) icon = true;
+  var closeOnClick = ref.closeOnClick; if ( closeOnClick === void 0 ) closeOnClick = false;
+  var elements = ref.elements; if ( elements === void 0 ) elements = [];
+
+  if (prevToast) {
+    prevToast.destroy();
+  }
+
+  this.message = message;
+  this.position = position;
+  this.el = el;
+  this.timeout = timeout;
+  this.closeOnClick = closeOnClick;
+  this.toast = document.createElement('div');
+  this.toast.className = "native-toast native-toast-" + (this.position);
+
+  if (type) {
+    this.toast.className += " native-toast-" + type;
+
+    if (icon) {
+      this.message = "<span class=\"native-toast-icon-" + type + "\">" + (icons[type] || '') + "</span>" + (this.message);
+    }
+  }
+
+  var messageElement = document.createElement('div');
+  messageElement.className = 'native-toast-message';
+  messageElement.innerHTML = this.message;
+  [messageElement ].concat( elements).forEach(function (el) {
+    this$1.toast.appendChild(el);
+  });
+  var isMobile = document.body.clientWidth < 768;
+
+  if (edge || isMobile) {
+    this.toast.className += ' native-toast-edge';
+  } else if (rounded) {
+    this.toast.style.borderRadius = '33px';
+  }
+
+  this.el.appendChild(this.toast);
+  prevToast = this;
+  this.show();
+
+  if (!debug && timeout) {
+    this.hide();
+  }
+
+  if (this.closeOnClick) {
+    this.toast.addEventListener('click', function () {
+      this$1.destroy();
+    });
+  }
+};
+
+Toast.prototype.show = function show () {
+    var this$1 = this;
+
+  setTimeout(function () {
+    this$1.toast.classList.add('native-toast-shown');
+  }, 300);
+};
+
+Toast.prototype.hide = function hide () {
+    var this$1 = this;
+
+  setTimeout(function () {
+    this$1.destroy();
+  }, this.timeout);
+};
+
+Toast.prototype.destroy = function destroy () {
+    var this$1 = this;
+
+  if (!this.toast) { return; }
+  this.toast.classList.remove('native-toast-shown');
+  setTimeout(function () {
+    if (this$1.toast) {
+      this$1.el.removeChild(this$1.toast);
+      this$1.toast = null;
+    }
+  }, 300);
+};
+
+function toast(options) {
+  return new Toast(options);
+}
+
+var loop = function () {
+  toast[type] = function (options) { return toast(assign({
+    type: type
+  }, options)); };
+};
+
+for (var type of ['success', 'info', 'warning', 'error']) loop();
+
+module.exports = toast;
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * nano-assign v1.0.0
+ * (c) 2017-present egoist <0x142857@gmail.com>
+ * Released under the MIT License.
+ */
+
+
+var index = function(obj) {
+  var arguments$1 = arguments;
+
+  for (var i = 1; i < arguments.length; i++) {
+    // eslint-disable-next-line guard-for-in, prefer-rest-params
+    for (var p in arguments[i]) { obj[p] = arguments$1[i][p]; }
+  }
+  return obj
+};
+
+module.exports = index;
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
  * Vue.js v2.5.17
  * (c) 2014-2018 Evan You
@@ -46915,10 +47159,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(37).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(39).setImmediate))
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -46974,7 +47218,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(38);
+__webpack_require__(40);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -46988,7 +47232,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -47181,15 +47425,15 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(6)))
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(40)
+var normalizeComponent = __webpack_require__(42)
 /* script */
-var __vue_script__ = __webpack_require__(41)
+var __vue_script__ = __webpack_require__(43)
 /* template */
-var __vue_template__ = __webpack_require__(42)
+var __vue_template__ = __webpack_require__(44)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -47206,7 +47450,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/ExampleComponent.vue"
+Component.options.__file = "resources/assets/js/components/PaginationComponent.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -47215,9 +47459,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7168fb6a", Component.options)
+    hotAPI.createRecord("data-v-2a6048c8", Component.options)
   } else {
-    hotAPI.reload("data-v-7168fb6a", Component.options)
+    hotAPI.reload("data-v-2a6048c8", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -47228,7 +47472,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -47337,7 +47581,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47358,58 +47602,132 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        console.log('Component mounted.');
+  props: {
+    pagination: {
+      type: Object,
+      required: true
+    },
+    offset: {
+      type: Number,
+      default: 4
     }
+  },
+  computed: {
+    pagesNumber: function pagesNumber() {
+      if (!this.pagination.to) {
+        return [];
+      }
+      var from = this.pagination.current_page - this.offset;
+      if (from < 1) {
+        from = 1;
+      }
+      var to = from + this.offset * 2;
+      if (to >= this.pagination.last_page) {
+        to = this.pagination.last_page;
+      }
+      var pagesArray = [];
+      for (var page = from; page <= to; page++) {
+        pagesArray.push(page);
+      }
+      return pagesArray;
+    }
+  },
+  methods: {
+    changePage: function changePage(page) {
+      this.pagination.current_page = page;
+      this.$emit('paginate');
+    }
+  }
 });
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card card-default" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
-            ])
+  return _c(
+    "ul",
+    { staticClass: "pagination" },
+    [
+      _vm.pagination.current_page > 1
+        ? _c("li", [
+            _c(
+              "a",
+              {
+                attrs: { href: "javascript:void(0)", "aria-label": "Previous" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.changePage(_vm.pagination.current_page - 1)
+                  }
+                }
+              },
+              [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("«")])]
+            )
           ])
-        ])
-      ])
-    ])
-  }
-]
+        : _vm._e(),
+      _vm._v(" "),
+      _vm._l(_vm.pagesNumber, function(page) {
+        return _c(
+          "li",
+          { class: { active: page == _vm.pagination.current_page } },
+          [
+            _c(
+              "a",
+              {
+                attrs: { href: "javascript:void(0)" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.changePage(page)
+                  }
+                }
+              },
+              [_vm._v(_vm._s(page))]
+            )
+          ]
+        )
+      }),
+      _vm._v(" "),
+      _vm.pagination.current_page < _vm.pagination.last_page
+        ? _c("li", [
+            _c(
+              "a",
+              {
+                attrs: { href: "javascript:void(0)", "aria-label": "Next" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.changePage(_vm.pagination.current_page + 1)
+                  }
+                }
+              },
+              [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("»")])]
+            )
+          ])
+        : _vm._e()
+    ],
+    2
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-7168fb6a", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-2a6048c8", module.exports)
   }
 }
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
