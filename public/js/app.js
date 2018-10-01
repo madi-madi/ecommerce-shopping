@@ -13925,14 +13925,29 @@ var app = new Vue({
             to: 0,
             current_page: 1
         },
+        admins: {
+            total: 0,
+            per_page: 2,
+            from: 1,
+            to: 0,
+            current_page: 1
+        },
         offset: 4,
         settings: []
     },
     created: function created() {
-        this.getSettings();
+        if (window.location.pathname === '/admin/settings') {
+
+            this.getSettings();
+        }
     },
     mounted: function mounted() {
-        this.getUsers();
+        if (window.location.pathname === '/admin/users') {
+
+            this.getUsers();
+        } else if (window.location.pathname === '/admin/admins') {
+            this.getAdmins();
+        }
     },
 
     methods: {
@@ -13991,6 +14006,15 @@ var app = new Vue({
             }).catch(function (error) {});
 
             console.info('Test function colective');
+        },
+        getAdmins: function getAdmins() {
+            var _this2 = this;
+
+            // axios.get(`/admin/users?page=${this.users.current_page}`)
+
+            axios.get('/admin/admins?page=' + this.admins.current_page).then(function (response) {
+                _this2.admins = response.data;
+            }).catch(function (error) {});
         },
         getSettings: function getSettings() {
             axios.get('settings').then(function (response) {

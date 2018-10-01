@@ -18,7 +18,7 @@ class AdminUsersController extends Controller
  
     public function index()
     {
-        if (request()->ajax()) {
+        if (request()->ajax() ) {
         # code...
         $users = self::$user->withTrashed()->paginate(10);
         return response($users);

@@ -45,17 +45,44 @@
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">MAIN NAVIGATION</li>
+        <li class="header">{{trans('admin.main_avigation')}}</li>
         <li class="active treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+            <i class="fa fa-dashboard"></i> <span>{{trans('admin.settings')}}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
+            <li class="active"><a href="{{route('settings')}}"><i class="fa fa-circle-o"></i>{{trans('admin.edit_settings')}}</a></li>
             <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+          </ul>
+        </li>
+
+        {{-- Users --}}
+                <li class="active treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>{{trans('admin.Users')}}</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="{{route('users')}}"><i class="fa fa-circle-o"></i>{{trans('admin.users')}}</a></li>
+            <li><a href="index2.html"><i class="fa fa-circle-o"></i> {{trans('admin.add_user')}}</a></li>
+          </ul>
+        </li>
+
+                <li class="active treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>{{trans('admin.admins')}}</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="{{route('admins')}}"><i class="fa fa-circle-o"></i>{{trans('admin.admins')}}</a></li>
+            <li><a href="index2.html"><i class="fa fa-circle-o"></i> {{trans('admin.add_admin')}}</a></li>
           </ul>
         </li>
       </ul>

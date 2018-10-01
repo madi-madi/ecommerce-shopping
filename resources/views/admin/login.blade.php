@@ -30,6 +30,11 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
+    <img 
+    src="{{Storage::url(settings()->logo)}}" 
+    style="border-radius: 50%;"
+    width="100px" height="100px" 
+    >
     <a href="../../index2.html"><b>{{trans('admin.app_name')}}</b></a>
   </div>
   <!-- /.login-logo -->

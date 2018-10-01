@@ -16,18 +16,20 @@ Route::group(['middleware'=> 'admin:admin'], function(){
 	});
 
 	// User Controller 
-	Route::get('users','AdminUsersController@index');
+	Route::get('users','AdminUsersController@index')->name('users');
 	// delete user 
 	Route::delete('user/delete/{id}',['middleware'=>'delete:SuperAdmin,Admin',
 	'as'=>'AdminUsersController@deleteUser']);
 	Route::delete('user/restore/{id}',['middleware'=>'delete:SuperAdmin,Admin','as'=>'AdminUsersController@restoreUser']);
 	Route::delete('user/deleteforever/{id}',['middleware'=>'delete:SuperAdmin','as'=>'AdminUsersController@deleteforeverUser']);
+// Admins
+	Route::get('admins','AdminsController@index')->name('admins');
 
 
 
 
 	// setting - website general 
-	Route::get('settings','SettingsController@settings');
+	Route::get('settings','SettingsController@settings')->name('settings');
 	Route::post('settings','SettingsController@settings_save');
 	Route::get('files','SettingsController@show');
 
