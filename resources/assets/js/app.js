@@ -25,7 +25,13 @@ Vue.component('pagination-component', require('./components/PaginationComponent.
 
 const app = new Vue({
     el: '#app',
-    data:{
+    data: function(){
+        return{
+        offset: 4,
+        admin_auth :0,
+        sound:'http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3',
+        // http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3
+        notification:[],
         users: {
             total: 0,
             per_page: 2,
@@ -40,14 +46,29 @@ const app = new Vue({
             to: 0,
             current_page: 1
         },
-        offset: 4,
+
         settings:[],
+
+    }
     },
     created(){
     if (window.location.pathname === '/admin/settings') {
 
         this.getSettings()
+
     }
+this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
+// console.log('dddddddd '+this.admin_auth)
+
+    Echo.private('App.Admin.' + this.admin_auth)
+    .notification((notification) => {
+        console.log(notification);
+        this.notification.unshift(notification)
+        if(this.sound) {
+        var audio = new Audio(this.sound);
+        audio.play();
+      }
+    });
     },
     mounted(){
     if (window.location.pathname === '/admin/users') {
@@ -56,7 +77,9 @@ const app = new Vue({
     }else if (window.location.pathname === '/admin/admins') {
         this.getAdmins()
     }
-
+    // if (this.admin_auth) {
+        this.getNotification();
+    // }
 
     },
     methods:{
@@ -115,6 +138,7 @@ const app = new Vue({
 
                 }
             }).then((response)=>{
+                console.info('Seting '+ JSON.stringify(response.data));
                 app.settings = response.data
             })
             .catch((error)=>{})
@@ -136,6 +160,14 @@ const app = new Vue({
             })
             .catch((error)=>{})
         }, 
+
+        getNotification(){
+            axios.get(`notification/admin`).then((response)=>{
+                console.log(response.data)
+                this.notification = response.data
+
+            }).catch((error)=>{})
+        },
 
     },
 });

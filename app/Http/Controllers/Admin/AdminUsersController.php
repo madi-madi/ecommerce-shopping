@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\User;
+use Auth;
 
 class AdminUsersController extends Controller
 {
@@ -54,6 +55,12 @@ class AdminUsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function notificationAdmin()
+    {
+       $notify_data =  Auth::guard('admin')->user()->notifications()->get();
+       return response($notify_data);
+
+    }
     public function create()
     {
         return view('admin.userstables.create',['title'=>trans('admin.create_user')]);

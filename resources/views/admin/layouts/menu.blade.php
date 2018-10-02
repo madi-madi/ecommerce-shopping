@@ -1,4 +1,4 @@
-{{-- Start Menu --}}
+Start Menu --}}
 <div class="navbar-custom-menu">
 <ul class="nav navbar-nav">
 <!-- Messages: style can be found in dropdown.less-->
@@ -82,16 +82,16 @@
 <li class="dropdown notifications-menu">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 <i class="fa fa-bell-o"></i>
-<span class="label label-warning">10</span>
+<span class="label label-warning">@{{notification.length}}</span>
 </a>
 <ul class="dropdown-menu">
-<li class="header">You have 10 notifications</li>
+{{-- <li class="header" >New User  with name : <b> @{{notify.user_name}} </b></li> --}}
 <li>
   <!-- inner menu: contains the actual data -->
   <ul class="menu">
-    <li>
+    <li v-for="notify in notification">
       <a href="#">
-        <i class="fa fa-users text-aqua"></i> 5 new members joined today
+        <i class="fa fa-users text-aqua"></i> New User  with name : <b> @{{notify.data.user_name}} </b>
       </a>
     </li>
     <li>
@@ -246,4 +246,4 @@
 </li>
 </ul>
 </div>
-{{-- End menu  --}}
+{{-- End menu 

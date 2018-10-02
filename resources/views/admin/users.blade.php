@@ -1,11 +1,11 @@
 @extends('admin.index')
 @section('content')
-<div class="box">
+<div class="box" :admin_auth="{{Request::user('admin')->id}}">
   <div class="box-header">
     <h3 class="box-title">{{ $title }}</h3>
   </div>
   <!-- /.box-header -->
-  <div class="box-body">
+  <div class="box-body" >
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>

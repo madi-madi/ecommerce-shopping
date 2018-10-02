@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Admin;
 //  create token verify
 use Auth;
 use Illuminate\Support\Str;
@@ -10,6 +11,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Notifications\NewUser;
+  
 use Mail;
 use App\Mail\verifyEmail;
 
@@ -42,10 +45,15 @@ class RegisterController extends Controller
      * @return void
      */
     public static $user = Null;
+    public static $admins = Null;
+
     public function __construct()
     {
         if (self::$user == Null) {
             self::$user = new User;
+        } 
+        if (self::$admins == Null) {
+            self::$admins = new Admin;
         }
         $this->middleware('guest');
     }
@@ -80,6 +88,12 @@ class RegisterController extends Controller
             // create verify token 
             'verify_token'=> Str::random(40),
         ]);
+        if ($create_user) {
+            $admins_all = self::$admins->all();
+            foreach ($admins_all as $admin) {
+                $admin->notify(new NewUser($create_user));
+            }
+        }
 
         $thisUser = self::$user->findOrFail($create_user->id);
         $this->sendEmail($thisUser);

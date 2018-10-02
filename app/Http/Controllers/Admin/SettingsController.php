@@ -6,16 +6,25 @@ use App\Setting;
 use Illuminate\Http\Request;
 use Storage;
 use Upload;
+use Auth;
+use App\Admin;
+use App\Notifications\UpdateSettings;
+
 
 
 class SettingsController extends Controller
 {
+    public static $admins = Null;
    public static $settings = Null;
     public function __construct()
     {
+         // dd($settings->orderBy('id','desc')->first());
         if (self::$settings == Null) {
             self::$settings = new Setting;
-            // dd($settings->orderBy('id','desc')->first());
+        }
+
+        if (self::$admins == Null) {
+            self::$admins = new Admin;
         }
     }
     public function settings()
@@ -80,8 +89,9 @@ class SettingsController extends Controller
         if active this except  store url img error : "/opt/lampp/temp/phpVrzpO1"
         */
     	Setting::orderBy('id','desc')->update($data);
-        session()->flash('success',trans('admin.record_updated'));
-    	return redirect(aurl('settings'));
+        // session()->flash('success',trans('admin.record_updated'));
+    	// return redirect(aurl('settings'));
+
     }
 
         public function show(){

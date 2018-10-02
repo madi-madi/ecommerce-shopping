@@ -6,8 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use App\User;
-class NewUser extends Notification
+use App\Setting;
+
+class UpdateSettings extends Notification
 {
     use Queueable;
 
@@ -16,13 +17,10 @@ class NewUser extends Notification
      *
      * @return void
      */
-
-
-
-    protected $user = Null;
-    public function __construct(User $user)
+    protected $setting = Null;
+    public function __construct()
     {
-        $this->user = $user;
+        //
     }
 
     /**
@@ -33,7 +31,7 @@ class NewUser extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','broadcast'];
+        return ['mail'];
     }
 
     /**
@@ -42,14 +40,6 @@ class NewUser extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toDatabase()
-    {
-                return [
-                    'id'=>$this->user->id,
-                    'user_name'=> $this->user->name,
-                    'created at '=> $this->user->created_at,
-        ];
-    }
     public function toMail($notifiable)
     {
         return (new MailMessage)
@@ -67,11 +57,7 @@ class NewUser extends Notification
     public function toArray($notifiable)
     {
         return [
-            'data'=>[
-                      'id'=>$this->user->id,
-                    'user_name'=> $this->user->name,
-                    'created at '=> $this->user->created_at,
-            ]
+            //
         ];
     }
 }

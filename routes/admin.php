@@ -25,6 +25,9 @@ Route::group(['middleware'=> 'admin:admin'], function(){
 // Admins
 	Route::get('admins','AdminsController@index')->name('admins');
 
+	// notification/admin
+	Route::get('notification/admin','AdminUsersController@notificationAdmin');
+
 
 
 
