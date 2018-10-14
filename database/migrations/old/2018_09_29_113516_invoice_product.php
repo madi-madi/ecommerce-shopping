@@ -13,7 +13,12 @@ class InvoiceProduct extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('invoice_product', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('product_id')->unsignedin();
+            $table->integer('invoice_id')->unsignedin();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +28,7 @@ class InvoiceProduct extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('invoice_product');
+    
     }
 }

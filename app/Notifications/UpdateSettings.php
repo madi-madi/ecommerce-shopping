@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Setting;
+use App\Admin;
 
 class UpdateSettings extends Notification
 {
@@ -17,10 +18,14 @@ class UpdateSettings extends Notification
      *
      * @return void
      */
-    protected $setting = Null;
-    public function __construct()
+    protected $settings = Null;
+    protected $admin = Null;
+
+    public function __construct( Admin $admin ,Setting $settings )
     {
-        //
+        $this->admin=$admin;
+        $this->settings = $settings;
+        // dd($settings , $admin->id);
     }
 
     /**
@@ -31,7 +36,7 @@ class UpdateSettings extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -54,10 +59,25 @@ class UpdateSettings extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
+        public function toDatabase($notifiable)
+    {
+        return [
+            'data'=>[
+                'id'=>$this->admin->id,
+                'user_name'=>$this->admin->name,
+                'created_at'=>$this->settings->updated_at
+            ]
+        ];
+    }
+
     public function toArray($notifiable)
     {
         return [
-            //
+            'data'=>[
+                'id'=>$this->admin->id,
+                'user_name'=>$this->admin->name,
+                'created_at'=>$this->settings->updated_at
+            ]
         ];
     }
 }

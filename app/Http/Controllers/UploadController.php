@@ -19,7 +19,7 @@ class UploadController extends Controller
             in_array('delete_file',$data) && !empty($data['delete_file']) ? Storage::delete($data['delete_file']) : '';
             $pathStore = request()->file($data['file'])->store($data['path']);
             $pathDb = substr($pathStore , 7);
-            // dd($pathDb);
+            dd($pathDb);
             return $pathDb;
     	}
     }

@@ -97,60 +97,29 @@ class AdminUsersController extends Controller
         return redirect(aurl('users'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $user = User::find($id);
-        $title = trans('admin.edit');
-        return view('admin.userstables.edit',compact('user','title'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update($id)
+    public function updateUser($id)
     {
    $data = $this->validate(request(),
             [
             'name'=>'required',
             'email'=>'required|email|unique:users,email,'.$id,// escap this 
-            'level'=>'required|in:user,company,vendor',
+            'status'=>'required',
             'password'=>'sometimes|nullable|min:6',
         ],[],[
             // nice name
             'name'=> trans('admin.name'),
             'email'=> trans('admin.email'),
-            'level'=> trans('admin.level'),
+            'status'=> trans('admin.status'),
             'password'=> trans('admin.password'),
 
         ]);
-        if (request()->has('password')) {
-        $data['password']= bcrypt(request('password'));
+        // if (request()->has('password')) {
+        // $data['password']= bcrypt(request('password'));
             
-        }
-        User::where('id',$id)->update($data);
-        session()->flash('success',trans('admin.record_updated'));
-        return redirect(aurl('users'));
+        // }
+        self::$user->where('id',$id)->update($data);
+        // session()->flash('success',trans('admin.record_updated'));
     }
 
     /**

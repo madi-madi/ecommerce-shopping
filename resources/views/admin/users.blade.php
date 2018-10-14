@@ -1,6 +1,8 @@
 @extends('admin.index')
 @section('content')
 <div class="box" :admin_auth="{{Request::user('admin')->id}}">
+    <modal-component :open-modal="showView" @closemodal="close"  ></modal-component>
+
   <div class="box-header">
     <h3 class="box-title">{{ $title }}</h3>
   </div>
@@ -29,11 +31,30 @@
                   <td>@{{user.created_at}}</td>
                   <td>
                     <div v-if="user.deleted_at === null">
-                      <button class="btn btn-warning" @click="deleteUser(user,index)"> Delete </button>
+                      <button class="btn btn-warning" @click="deleteUser(user,index)"
+                       title="{{trans('admin.delete')}}"
+                      > 
+                        <i class="fa fa-fw fa-trash fa-lg"></i>
+                       </button>
+                      <button 
+                      class="btn btn-success"
+                      @click.prevent="openShow(index)"
+                      type="button" 
+                      title="{{trans('admin.edit')}}"
+                      > 
+                      <i class="fa fa-fw fa-edit fa-lg"></i>
+                       </button>  
                     </div>
                     <div v-else>
-                      <button class="btn btn-primary" @click="restoreUser(user,index)" > Restore </button>
-                      <button class="btn btn-danger" @click="deleteforeverUser(user,index)"> Delete for ever </button>
+                      <button class="btn btn-primary" 
+                      @click="restoreUser(user,index)"
+                      title="{{trans('admin.restore')}}"> 
+            <i class="fa fa-fw fa-save fa-lg"></i> </button>
+                      <button class="btn btn-danger" @click="deleteforeverUser(user,index)"
+                      title="{{trans('admin.delete_for_ever')}}"
+                       > 
+            <i class="fa fa-fw fa-trash-o fa-lg"></i>
+                       </button>
                       
                     </div>
                     

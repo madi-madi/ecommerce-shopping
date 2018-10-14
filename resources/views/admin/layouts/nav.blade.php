@@ -48,7 +48,7 @@
         <li class="header">{{trans('admin.main_avigation')}}</li>
         <li class="active treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>{{trans('admin.settings')}}</span>
+            <i class="ion ion-ios-gear-outline"></i> <span>{{trans('admin.settings')}}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -82,6 +82,20 @@
           </a>
           <ul class="treeview-menu">
             <li class="active"><a href="{{route('admins')}}"><i class="fa fa-circle-o"></i>{{trans('admin.admins')}}</a></li>
+            <li><a href="index2.html"><i class="fa fa-circle-o"></i> {{trans('admin.add_admin')}}</a></li>
+          </ul>
+        </li>
+        {{-- products --}}
+
+                <li class="active treeview">
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>{{trans('admin.products')}}</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="{{route('products')}}"><i class="fa fa-circle-o"></i>{{trans('admin.products')}}</a></li>
             <li><a href="index2.html"><i class="fa fa-circle-o"></i> {{trans('admin.add_admin')}}</a></li>
           </ul>
         </li>

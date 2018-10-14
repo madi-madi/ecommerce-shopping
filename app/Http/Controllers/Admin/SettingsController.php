@@ -84,11 +84,24 @@ class SettingsController extends Controller
                         ]);
          //   $data['icon'] = request()->file('icon')->store('public');
         }
-        /*
-    	$data = request()->except(['_token','_method']);
-        if active this except  store url img error : "/opt/lampp/temp/phpVrzpO1"
-        */
-    	Setting::orderBy('id','desc')->update($data);
+        
+    	$setting =  self::$settings->orderBy('id','desc')->update($data);
+            $settingsUpdate = self::$settings->orderBy('id','desc')->first();
+
+        if ($setting) {
+          $admins =   self::$admins->all();
+          // dd($admins);
+            foreach ($admins as $admin) {
+               $admin_auth =  Auth::guard('admin')->user();
+               // dd($admin);
+               if ($admin->id !== $admin_auth->id) {
+                $admin->notify(new UpdateSettings($admin,$settingsUpdate));
+                   
+               }
+            }
+        }
+
+       return  response($settingsUpdate);
         // session()->flash('success',trans('admin.record_updated'));
     	// return redirect(aurl('settings'));
 

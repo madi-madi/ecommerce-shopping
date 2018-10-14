@@ -49,16 +49,21 @@
     </div>
     <div class="form-group">
       <label for="main_lang">{{trans('admin.main_lang')}}</label>
-      <select v-model="settings.main_lang" class="form-control" id="main_lang">
+      <select v-model="settings.main_lang" class="form-control" name="main_lang" id="main_lang">
          <option disabled value="">{{trans('admin.please_select_one')}}</option>
-         <option value="en">{{trans('admin.en')}}</option>
-         <option value="ar">{{trans('admin.ar')}}</option>
+         <option value="en"
+         {{-- :selected="en === selected_lang ? true : false" --}}
+         >{{trans('admin.en')}}</option>
+         <option value="ar"
+         {{-- :selected="ar === selected_lang ? true : false" --}}
+
+         >{{trans('admin.ar')}}</option>
        </select>
     </div>
      <div class="form-group">
       <label for="status">{{trans('admin.status')}}</label>
-      <select v-model="settings.status" class="form-control" id="status">
-         <option disabled value="">{{trans('admin.please_select_one')}}</option>
+      <select v-model="settings.status" class="form-control" name="status" id="status">
+         {{-- <option disabled value="">{{trans('admin.please_select_one')}}</option> --}}
          <option value="open">{{trans('admin.open')}}</option>
          <option value="close">{{trans('admin.close')}}</option>
        </select>

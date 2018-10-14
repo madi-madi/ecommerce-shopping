@@ -1,4 +1,4 @@
-Start Menu --}}
+
 <div class="navbar-custom-menu">
 <ul class="nav navbar-nav">
 <!-- Messages: style can be found in dropdown.less-->
@@ -235,7 +235,7 @@ Start Menu --}}
     <a href="#" class="btn btn-default btn-flat">Profile</a>
   </div>
   <div class="pull-right">
-    <a href="#" class="btn btn-default btn-flat">Sign out</a>
+    <a href="{{aurl('logout')}}" class="btn btn-default btn-flat">Sign out</a>
   </div>
 </li>
 </ul>
@@ -246,4 +246,3 @@ Start Menu --}}
 </li>
 </ul>
 </div>
-{{-- End menu 

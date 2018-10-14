@@ -240,6 +240,8 @@
 <script src="{{url('design/adminlte')}}/dist/js/pages/dashboard.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{url('design/adminlte')}}/dist/js/demo.js"></script>
+  <script src="https://unpkg.com/native-toast@2.0.0/dist/native-toast.min.js"></script>
+
     <script src="{{ asset('js/app.js') }}"></script>
     
 </body>

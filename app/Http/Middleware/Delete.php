@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-
+use Auth;
 class Delete
 {
     /**
@@ -13,10 +13,20 @@ class Delete
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $SuperAdmin , $admin)
+    public function handle($request, Closure $next ,$SuperAdmin , $Admin)
     {
-        $admin = $request()->user('admin');
-        return ($admin->hasRole($SuperAdmin) || $admin->hasRole($Admin))? $next($request) : response(view('errors.404'),404);
+        $admin =Auth::guard('admin')->user();
+
+        // dd($admin);
+        // dd($admin);
+        if (Auth::guard('admin')->guest()) {
+       return response(view('errors.401'),401);
+            
+        }else{
+               return($admin->hasRole($SuperAdmin)||$admin->hasRole($Admin) && Auth::guard('admin')->check())? $next($request):response(view('errors.401'),401);
+        }
+     // return($admin->hasRole($SuperAdmin)||$admin->hasRole($Admin))? $next($request):response(view('errors.401'),401);
+     
         return $next($request);
     }
 }
