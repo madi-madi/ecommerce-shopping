@@ -22,6 +22,8 @@
 Route::group(['middleware'=>'maintenance'],function(){
 
 Route::get('/', function () {
+	$string=exec('getmac');
+	// dd(GetMAC());
     return view('welcome');
 });
 Route::get('verifyEmailFirst','Auth\RegisterController@verifyEmailFirst')->name('verifyEmailFirst');

@@ -94,10 +94,10 @@ class SettingsController extends Controller
             foreach ($admins as $admin) {
                $admin_auth =  Auth::guard('admin')->user();
                // dd($admin);
-               if ($admin->id !== $admin_auth->id) {
+               // if ($admin->id !== $admin_auth->id) {
                 $admin->notify(new UpdateSettings($admin,$settingsUpdate));
                    
-               }
+               // }
             }
         }
 

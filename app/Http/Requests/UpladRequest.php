@@ -33,11 +33,15 @@ class UpladRequest extends FormRequest
             // 'files'=>'sometimes',
             'category_id'=>'required',
         ];
-    $photos = count(request('files'));
-    // dd($photos);
+        if (request('file_product')) {
+    $photos = count(request('file_product'));
         foreach (range(0, $photos) as  $photo) {
-            $rules['files.'.$photo]= v_image();
+            $rules['file_product.'.$photo]= v_image();
         }
+            # code...
+        }
+    // dd($photos);
+
         return $rules;
     }
 }

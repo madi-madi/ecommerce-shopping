@@ -9,44 +9,44 @@
               </div>
               <div class="modal-body">
                         <p>Create New Product </p>
-                          <form method="post" enctype="multipart/form-data" 
-                           v-on:submit.prevent="create_product()" id="products">
+                          <form method="patch" enctype="multipart/form-data" 
+                           v-on:submit.prevent="update_product()" id="products">
 
                             <div class="form-group">
                             <label for="title"> title</label>
-                            <input type="text" title="title" id="title" name="title" class="form-control" v-model="new_product.title" >
+                            <input type="text" title="title" id="title" name="title" class="form-control" v-model="product.title" >
                           </div>
                             <div class="form-group">
                             <label for="description">description</label>
-                            <input type="text" name="description" id="description" class="form-control" v-model="new_product.description"
+                            <input type="text" name="description" id="description" class="form-control" v-model="product.description"
                             >
                           </div>
                             <div class="form-group">
                             <label for="price">price</label>
                             <input type="number" name="price" id="price" class="form-control"
-                            v-model.number="new_product.price" 
+                            v-model.number="product.price" 
                             >
                           </div>
 
                             <div class="form-group">
                             <label for="weight">weight</label>
                             <input type="number" name="weight" id="weight" class="form-control" 
-                            v-model.number="new_product.weight"
+                            v-model.number="product.weight"
                             >
                           </div>
 
                             <div class="form-group">
                             <label for="files">files</label>
                             <input type="file" name="files[]" ref="files" id="files" class="form-control" 
-                            v-on:change="file_product"
+                           
                             multiple 
                             >
                           </div>
 
                             <div class="form-group">
                             <label for="category">category</label>
-                            <!-- <input type="hidden" name="category_id" value="1"> -->
-                          <select  class="form-control" name="category_id" id="category_id" v-model="new_product.category_id">
+                            <input type="hidden" name="category_id" value="1">
+                          <select  class="form-control" name="category_id" id="category" v-model="product.category_id">
                              <option disabled value="">please_select_one</option> 
                              <option v-for="category in categories" :value="category.id">
                              {{category.category_name}}</option>
@@ -77,14 +77,7 @@
         return{
             path:'',
             url:'',
-            new_product:{
-              titlt:'',
-              description:'',
-              files:'',
-              price:'',
-              weight:'',
-              category_id:'',
-            },
+            product:{},
             errors:{},
 
             categories:[],
@@ -100,7 +93,7 @@
         },
         mounted() {
             // console.log('Component mounted.')
-            this.path = window.location.pathname
+            // this.path = window.location.pathname
             // console.log(product.category_id);            
 
 
@@ -114,48 +107,18 @@
          this.$emit('closemodal')
          this.list = this.list
         },
-      file_product(event){
-      console.log(event.target.files);
 
-      this.new_product.files = event.target.files
-
-      
-
-
-    },
-
-    create_product()
+    update_product()
     {
-      let file_product ;
-
-      // file_product(event)
       console.log('yes');
-      // let formData = new FormData(document.getElementById('products'));
-            let formData = new FormData();
-                  for(var i= 0; i <this.new_product.files.length;i++){
-                    file_product = this.new_product.files[i];
-      formData.append('file_product[]',file_product)
-
-      }
-      formData.append('category_id', this.new_product.category_id)
-      formData.append('title', this.new_product.title)
-      formData.append('description', this.new_product.description)
-      formData.append('weight', this.new_product.weight)
-      formData.append('price', this.new_product.price)
-      // formData.append('category_id', this.product.category_id)
-
-
-            axios.post(`products/create`,formData,{
-                headers:{
-                'Content-Type': 'multipart/form-data'
-
-                }
-            }).then((response)=>{
+      let formData = new FormData(document.getElementById('products'));
+            axios.patch(`product/${this.product.id}/update`,this.$data.product
+            ).then((response)=>{
                 // console.info('Seting '+ JSON.stringify(response.data));
                 // this.settings = response.data
 
                         this.$refs.files.value = null;
-                        this.$parent.products.data.unshift(response.data);
+                        // this.$parent.products.data.unshift(response.data);
                         this.close();
 
                         // this.$refs.icon.value = null;
@@ -188,7 +151,22 @@
 
       
     },
-
+    update(){
+      axios.patch(`${this.url}/${this.admin.id}/update`,this.$data.admin).then((response)=>{
+          console.info(response.status);
+          this.close();
+          nativeToast({
+          message: 'Updated Success',
+          position: 'north-east',
+          // Self destroy in 5 seconds
+          timeout: 5000,
+          type: 'success'
+          })
+      })
+      .catch((error)=>{
+        this.errors= error.response.data.error;
+      })
+    },
 
 
     },

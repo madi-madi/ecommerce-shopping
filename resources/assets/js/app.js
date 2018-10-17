@@ -24,6 +24,10 @@ window.Vue = require('vue');
 Vue.component('pagination-component', require('./components/PaginationComponent.vue'));
 Vue.component('modal-component', require('./components/ModalComponent.vue'));
 Vue.component('modal-create', require('./components/ModalCreate.vue'));
+Vue.component('modal-update', require('./components/ModalUpdate.vue'));
+Vue.component('upload-file', require('./components/UploadFile.vue'));
+
+
 
 
 
@@ -35,7 +39,11 @@ const app = new Vue({
         offset: 4,
         admin_auth :0,
         'showView':false,
+        showAdd:false,
+        block:false,
+        file:'',
         sound:'http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3',
+        categories:[],
         // http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3
         notification:[],
         users: {
@@ -65,6 +73,9 @@ const app = new Vue({
     }
     },
     created(){
+        // console.log(this.$children[1]);
+        // console.log(this.$children[2]);
+
     if (window.location.pathname === '/admin/settings') {
 
         this.getSettings()
@@ -75,13 +86,14 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
 
     Echo.private('App.Admin.' + this.admin_auth)
     .notification((notification) => {
-        console.log(notification);
+        // console.log(notification);
         this.notification.unshift(notification)
         if(this.sound) {
         var audio = new Audio(this.sound);
         audio.play();
       }
     });
+    this.getCategories();
     },
     mounted(){
     if (window.location.pathname === '/admin/users') {
@@ -107,10 +119,9 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             });
         },
         deleteUser(user ,index){
-            // console.info(user + index );
             axios.delete(`user/${user.id}/delete`).then((response)=>{
-            console.info(response);
-            this.getUsers();
+            this.users.data[index].deleted_at = response.data.deleted_at
+
             })
             .catch((error)=>{
             nativeToast({
@@ -120,25 +131,22 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             timeout: 4000,
             type: 'warning'
             })
-            // or nativeToast.warning(options)
 
             }) 
         },
         restoreUser(user ,index){
-            // console.info(user + index );
            axios.post(`user/${user.id}/restore`).then((response)=>{
-            console.info(response);
-            this.getUsers();
+            this.users.data[index].deleted_at = response.data.deleted_at
+
            })
            .catch((error)=>{
             console.error(error.type);
            }) 
         }, 
         deleteforeverUser(user ,index){
-            // console.info(user + index );
            axios.delete(`user/${user.id}/deleteforever`).then((response)=>{
-            console.info(response);
-            this.getUsers();
+            this.users.data.splice(index , 1)
+
            })
            .catch((error)=>{
             console.error(error.type);
@@ -146,10 +154,8 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         },
         // admin 
         deleteAdmin(admin ,index){
-            // console.info(user + index );
             axios.delete(`admin/${admin.id}/delete`).then((response)=>{
-            console.info(response);
-            this.getAdmins();
+            console.log(this.admins.data[index].deleted_at = response.data.deleted_at)
             })
             .catch((error)=>{
             nativeToast({
@@ -159,25 +165,20 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             timeout: 4000,
             type: 'warning'
             })
-            // or nativeToast.warning(options)
 
             }) 
         },
         restoreAdmin(admin ,index){
-            // console.info(user + index );
            axios.post(`admin/${admin.id}/restore`).then((response)=>{
-            console.info(response);
-            this.getAdmins();
+            console.log(this.admins.data[index].deleted_at = response.data.deleted_at)
            })
            .catch((error)=>{
             console.error(error.type);
            }) 
         }, 
         deleteforeverAdmin(admin ,index){
-            // console.info(user + index );
-           axios.post(`admin/${admin.id}/deleteforever`).then((response)=>{
-            console.info(response);
-            this.getAdmins();
+           axios.delete(`admin/${admin.id}/deleteforever`).then((response)=>{
+           this.admins.data.splice(index,1)
            })
            .catch((error)=>{
             console.error(error.type);
@@ -219,7 +220,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         },
         getSettings(){
             axios.get(`settings`).then((response)=>{
-            console.log(response.data)
+            // console.log(response.data)
             this.settings = response.data;
             })
             .catch((error)=>{})
@@ -227,10 +228,13 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
 
         getNotification(){
             axios.get(`notification/admin`).then((response)=>{
-            console.log(response.data)
+            // console.log(response.data)
             this.notification = response.data
 
             }).catch((error)=>{})
+        },
+        openCreate(){
+            app.showAdd = true;
         },
 
         openShow(index){
@@ -240,6 +244,9 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
 
             }else if (path_request === '/admin/users') {
             this.$children[0].admin= this.users.data[index] // children props
+
+            }else if (path_request === '/admin/products') {
+            this.$children[1].product= this.products.data[index] // children props
 
             }
             app.showView = true;
@@ -251,7 +258,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             .then((response) => {
             this.products = response.data;
             })
-            .catch(() => {
+            .catch((error) => {
             console.log('handle server error from here');
             });
         },
@@ -259,15 +266,58 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             console.log(this.products.data[ind])
 
             axios.delete(`image/${photo.id}/delete`).then((response)=>{
-                this.products.data[ind] =response.data;
+                this.products.data[ind].images.splice(index,1 )
             }).catch((error)=>{})
         },
 
         close() {
-
         this.showView =false;
+        this.showAdd =false;
+
+        },
+        // product 
+        deleteProduct(product ,index){
+            axios.delete(`product/${product.id}/delete`).then((response)=>{
+            console.log(this.products.data[index].deleted_at = response.data.deleted_at)
+            })
+            .catch((error)=>{
+            nativeToast({
+            message: 'Access denied',
+            // position: 'north-east',
+            // Self destroy in 5 seconds
+            timeout: 4000,
+            type: 'warning'
+            })
+
+            }) 
+        },
+        restoreProduct(product ,index){
+           axios.post(`product/${product.id}/restore`).then((response)=>{
+            console.log(this.products.data[index].deleted_at = response.data.deleted_at)
+           })
+           .catch((error)=>{
+            console.error(error.type);
+           }) 
+        }, 
+        deleteforeverProduct(product ,index){
+           axios.delete(`product/${product.id}/deleteforever`).then((response)=>{
+            console.info(response);
+                this.products.data.splice(index,1)
+           })
+           .catch((error)=>{
+            console.error(error.type);
+           }) 
+        },
+        getCategories(){
+            axios.get('categories').then((response)=>{
+            console.info(response);
+            this.categories = response.data
+            }).catch((error)=>{})
+
         },
 
 
-    },
+
+
+    }
 });

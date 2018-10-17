@@ -46,57 +46,73 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">{{trans('admin.main_avigation')}}</li>
-        <li class="active treeview">
+          <li class="active treeview  {{active_menu('settings')[0]}}">
           <a href="#">
             <i class="ion ion-ios-gear-outline"></i> <span>{{trans('admin.settings')}}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-          <ul class="treeview-menu">
+          <ul class="treeview-menu" style="{{active_menu('settings')[1]}}">
             <li class="active"><a href="{{route('settings')}}"><i class="fa fa-circle-o"></i>{{trans('admin.edit_settings')}}</a></li>
             <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
           </ul>
         </li>
 
         {{-- Users --}}
-                <li class="active treeview">
+                <li class="active treeview  {{active_menu('users')[0]}}">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>{{trans('admin.Users')}}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-          <ul class="treeview-menu">
+          <ul class="treeview-menu" style="{{active_menu('users')[1]}}">
             <li class="active"><a href="{{route('users')}}"><i class="fa fa-circle-o"></i>{{trans('admin.users')}}</a></li>
             <li><a href="index2.html"><i class="fa fa-circle-o"></i> {{trans('admin.add_user')}}</a></li>
           </ul>
         </li>
 
-                <li class="active treeview">
+                <li class="active treeview  {{active_menu('admins')[0]}}">
+                
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>{{trans('admin.admins')}}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-          <ul class="treeview-menu">
+          <ul class="treeview-menu" style="{{active_menu('admins')[1]}}">
             <li class="active"><a href="{{route('admins')}}"><i class="fa fa-circle-o"></i>{{trans('admin.admins')}}</a></li>
             <li><a href="index2.html"><i class="fa fa-circle-o"></i> {{trans('admin.add_admin')}}</a></li>
           </ul>
         </li>
         {{-- products --}}
 
-                <li class="active treeview">
+                <li class="active treeview  {{active_menu('products')[0]}}">
+            
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>{{trans('admin.products')}}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
-          <ul class="treeview-menu">
+          <ul class="treeview-menu" style="{{active_menu('products')[1]}}">
             <li class="active"><a href="{{route('products')}}"><i class="fa fa-circle-o"></i>{{trans('admin.products')}}</a></li>
             <li><a href="index2.html"><i class="fa fa-circle-o"></i> {{trans('admin.add_admin')}}</a></li>
+          </ul>
+        </li>
+{{-- Category --}}
+                <li class="active treeview  {{active_menu('categories')[0]}}">
+               
+          <a href="#">
+            <i class="fa fa-dashboard"></i> <span>{{trans('admin.categories')}}</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu" style="{{active_menu('categories')[1]}}">
+            <li class="active"><a href="{{route('categories')}}"><i class="fa fa-circle-o"></i>{{trans('admin.categories')}}</a></li>
+            <li><a href="index2.html"><i class="fa fa-circle-o"></i> {{trans('admin.add_category')}}</a></li>
           </ul>
         </li>
       </ul>

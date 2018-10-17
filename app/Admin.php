@@ -29,6 +29,10 @@ class Admin extends Authenticatable
     {
         return $this->belongsTo('App\Role','role_id');
     }
+
+    public function productsme(){
+        return $this->hasMany('App\Product','admin_id');
+    }
     public function hasRole($title)
     {
         $admin_role = $this->roles;

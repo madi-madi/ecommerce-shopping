@@ -42,6 +42,23 @@
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <style type="text/css">
+ label{
+    /*padding: 10px;*/
+    cursor: pointer;
+    /*background: red; */
+    /*display: table;*/
+    /*color: #fff;*/
+     }
+
+
+/*#upfile{
+  display: inline-block;
+}*/
+#myfileinput {
+    display: none;
+}
+  </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper" id="app">

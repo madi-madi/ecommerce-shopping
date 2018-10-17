@@ -2,21 +2,18 @@
 @section('content')
 <div class="box">
 
-    <modal-create :open-modal="showAdd" @closemodal="close" ></modal-create>
-    <modal-update :open-modal="showView" @closemodal="close" ></modal-update>
-
-
+    {{-- <modal-create :open-modal="showView" @closemodal="close" ></modal-create> --}}
   <div class="box-header">
     <h3 class="box-title">{{ $title }}</h3>
     <br>
-<button 
+{{-- <button 
 class="btn btn-primary"
-@click.prevent="openCreate()"
+@click.prevent="openShow('1')"
 type="button" 
 > 
   <i class="fa fa-fw fa-plus-square
  fa-lg"></i>
- {{trans('admin.add_product')}} </button> 
+ {{trans('admin.add_product')}} </button>  --}}
   </div>
   <!-- /.box-header -->
   <div class="box-body">
@@ -26,10 +23,7 @@ type="button"
     <th>{{trans('admin.id')}}</th>
     <th>{{trans('admin.name')}}</th>
     <th>{{trans('admin.description')}}</th>
-    <th>{{trans('admin.weight')}}</th>
-    <th>{{trans('admin.price')}}</th>
     <th>{{trans('admin.category')}}</th>
-    <th>{{trans('admin.crated_by')}}</th>
     <th>{{trans('admin.created_at')}}</th>
     <th>{{trans('admin.product_image')}}</th>
     <th>{{trans('admin.action')}}</th>
@@ -39,16 +33,13 @@ type="button"
     </thead>
     <tbody>
 
-    <tr v-for="(product , key) in products.data"
+{{--     <tr v-for="(product , key) in products.data"
     :class="{'alert alert-danger':product.deleted_at !== null}">
 
-    <td>@{{key+1}}</td>
+    <td>@{{product.id}}</td>
     <td>@{{product.title}}</td>
     <td>@{{product.description}}</td>
-    <td>@{{product.weight}}</td>
-    <td>@{{product.price}}</td>
     <td>@{{product.category['category_name']}}</td>
-    <td>@{{product.admin['name']}}</td>
     <td>@{{product.created_at}}</td>
     <td>
     <figcaption v-for="(photo , index) in product.images"
@@ -63,30 +54,19 @@ type="button"
     style="padding: 2px; background-color: #eceaea;" 
     :src="'/storage/'+photo.product_image">
   </figcaption>
-  <div v-if="product.images.length != 6">
-<upload-file :product_id = "product.id" v-if="product.deleted_at === null" :key_product ="key"  ></upload-file>
-    
-  </div>
-
-{{--     <input 
-    type="file"
-     id="file" 
-     ref="file"  
-     size="60"  
-     @change="addNewImage" accept="image/*" > --}}
     </td>
     <td>
     <div v-if="product.deleted_at === null">
     <button 
     class="btn btn-warning"
 
-    @click="deleteProduct(product,key)"
+    @click="deleteProduct(product,index)"
     title="{{trans('admin.delete')}}"   > 
     <i class="fa fa-fw fa-trash fa-lg"></i>
     </button>
     <button 
     class="btn btn-success"
-    @click.prevent="openShow(key)"
+    @click.prevent="openShow(index)"
     type="button"
     title="{{trans('admin.edit')}}" >
     <i class="fa fa-fw fa-edit fa-lg"></i>
@@ -97,13 +77,13 @@ type="button"
     <div v-else>
       <button 
       class="btn btn-primary"
-      @click="restoreProduct(product,key)"
+      @click="restoreProduct(product,index)"
       title="{{trans('admin.restore')}}"
       > 
       <i class="fa fa-fw fa-save fa-lg"></i>
       </button>
       <button class="btn btn-danger"
-      @click="deleteforeverProduct(product,key)"
+      @click="deleteforeverProduct(product,index)"
       title="{{trans('admin.delete_for_ever')}}"
       > 
       <i class="fa fa-fw fa-trash-o fa-lg"></i>
@@ -114,17 +94,13 @@ type="button"
 
     </td>
 
-    </tr>
+    </tr> --}}
     </tbody>
     <tfoot>
     <tr >
     <th>{{trans('admin.id')}}</th>
     <th>{{trans('admin.name')}}</th>
     <th>{{trans('admin.description')}}</th>
-        <th>{{trans('admin.weight')}}</th>
-    <th>{{trans('admin.price')}}</th>
-    <th>{{trans('admin.crated_by')}}</th>
-    <th>{{trans('admin.created_at')}}</th>
     <th>{{trans('admin.created_at')}}</th>
     <th>{{trans('admin.product_image')}}</th>
     <th>{{trans('admin.action')}}</th>

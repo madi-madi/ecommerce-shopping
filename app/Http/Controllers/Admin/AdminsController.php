@@ -43,14 +43,23 @@ class AdminsController extends Controller
         // find user 
         $adminDelete = self::$admins->find($id);
         //  delet admin
-        $adminDelete->delete();
+       $deleted =  $adminDelete->delete();
+            if ($deleted) {
+        // return $id;
+        $getAdminRestoreed = self::$admins->withTrashed()->find($id);
+        return response($getAdminRestoreed);
+        } 
     }
     public function restoreAdmin($id)
     {
         // find user 
         $adminRestore = self::$admins->onlyTrashed()->find($id);
         //  restore  admin
-        $adminRestore->restore();   
+      $restored =  $adminRestore->restore();   
+        if ($restored) {
+        $getAdminRestoreed = self::$admins->withTrashed()->find($id);
+        return response($getAdminRestoreed);
+        } 
     }
     public function deleteforeverAdmin($id)
     {

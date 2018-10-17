@@ -42,7 +42,14 @@ Route::group(['middleware'=> 'admin:admin'], function(){
     Route::post('products/create','AdmimProductsController@createProduct')->name('create_product');
 
 	Route::delete('image/{id}/delete',['middleware'=>'delete:SuperAdmin,Admin','as'=>'delete.image','uses'=>'AdmimProductsController@deleteImage']);
+	// delete product
+	Route::delete('product/{id}/delete',['middleware'=>'delete:SuperAdmin,Admin','as'=>'delete.product','uses'=>'AdmimProductsController@deleteProduct']);
 
+	Route::post('product/{id}/restore',['middleware'=>'update:SuperAdmin,Admin','as'=>'restore.product','uses'=>'AdmimProductsController@restoreProduct']);
+	Route::delete('product/{id}/deleteforever',['middleware'=>'delete:SuperAdmin,Admin','as'=>'deleteforever.product','uses'=>'AdmimProductsController@deleteforeverProduct']);
+	Route::patch('product/{id}/update',['middleware'=>'update:SuperAdmin,Admin','as'=>'update.product','uses'=>'AdmimProductsController@updateProduct']);
+	// product upload/file/product
+	Route::post('upload/file/product','AdmimProductsController@upload_new_file_product');
 
 	// notification/admin
 	Route::get('notification/admin','AdminUsersController@notificationAdmin');

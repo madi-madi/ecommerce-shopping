@@ -69,7 +69,7 @@ if (!function_exists('direction')) {
 if (!function_exists('v_image')) {
 	 function v_image($ext = null){
 		if ($ext===null) {
-			return 'image|mimes:jpg,jpeg,png,bmp';
+			return 'sometimes|image|mimes:jpg,jpeg,png,bmp';
 		}else{
 			return 'image|mimes:'.$ext;
 		}

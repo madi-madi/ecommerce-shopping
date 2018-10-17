@@ -34,14 +34,22 @@ class AdminUsersController extends Controller
         // find user 
         $userDelete = self::$user->find($id);
         //  delet User
-        $userDelete->delete();
+      $deleted =  $userDelete->delete();
+    if ($deleted) {
+        $getUserDeleted = self::$user->withTrashed()->find($id);
+        return response($getUserDeleted);
+        } 
     }
     public function restoreUser($id)
     {
         // find user 
         $userRestore = self::$user->onlyTrashed()->find($id);
         //  restore  User
-        $userRestore->restore();   
+      $restored =  $userRestore->restore(); 
+        if ($restored) {
+        $getUserRestored = self::$user->withTrashed()->find($id);
+        return response($getUserRestored);
+        }   
     }
     public function deleteforeverUser($id)
     {
