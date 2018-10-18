@@ -22,7 +22,7 @@
 Route::group(['middleware'=>'maintenance'],function(){
 
 Route::get('/', function () {
-	$string=exec('getmac');
+	// $string=exec('getmac');
 	// dd(GetMAC());
     return view('welcome');
 });

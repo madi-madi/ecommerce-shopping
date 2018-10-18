@@ -55,7 +55,7 @@ type="button"
     style="position: relative; display: inline-block;">
     <button class="fa fa-fw fa-close close"
     @click.prevent="deleteImage(photo, index , key)"
-    v-if="photo.product_image !== 'products/default.png'"
+    v-if="product.images.length != 1"
     style="position: absolute; right: 0;top: 0" 
     ></button>    
     <img  
@@ -63,10 +63,10 @@ type="button"
     style="padding: 2px; background-color: #eceaea;" 
     :src="'/storage/'+photo.product_image">
   </figcaption>
-  <div v-if="product.images.length != 6">
+  <span v-if="product.images.length != 6">
 <upload-file :product_id = "product.id" v-if="product.deleted_at === null" :key_product ="key"  ></upload-file>
     
-  </div>
+  </span>
 
 {{--     <input 
     type="file"

@@ -46,21 +46,21 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">{{trans('admin.main_avigation')}}</li>
-          <li class="active treeview  {{active_menu('settings')[0]}}">
-          <a href="#">
-            <i class="ion ion-ios-gear-outline"></i> <span>{{trans('admin.settings')}}</span>
+        
+        <li class="treeview {{active_menu('settings')[0]}}">
+          <a href="javascript:;">
+            <i class="fa fa-cog"></i>
+            <span>{{trans('admin.settings')}}</span>
             <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
           </a>
           <ul class="treeview-menu" style="{{active_menu('settings')[1]}}">
-            <li class="active"><a href="{{route('settings')}}"><i class="fa fa-circle-o"></i>{{trans('admin.edit_settings')}}</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+            <li><a href="{{aurl(('settings'))}}"><i class="fa fa-cog"></i> {{trans('admin.settings')}} </a></li>
+ 
           </ul>
         </li>
 
         {{-- Users --}}
-                <li class="active treeview  {{active_menu('users')[0]}}">
+        <li class="treeview {{active_menu('users')[0]}}">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>{{trans('admin.Users')}}</span>
             <span class="pull-right-container">
@@ -73,9 +73,8 @@
           </ul>
         </li>
 
-                <li class="active treeview  {{active_menu('admins')[0]}}">
-                
-          <a href="#">
+        <li class="treeview {{active_menu('admins')[0]}}">
+            <a href="#">
             <i class="fa fa-dashboard"></i> <span>{{trans('admin.admins')}}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -88,8 +87,7 @@
         </li>
         {{-- products --}}
 
-                <li class="active treeview  {{active_menu('products')[0]}}">
-            
+        <li class="treeview {{active_menu('products')[0]}}">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>{{trans('admin.products')}}</span>
             <span class="pull-right-container">
@@ -102,8 +100,7 @@
           </ul>
         </li>
 {{-- Category --}}
-                <li class="active treeview  {{active_menu('categories')[0]}}">
-               
+        <li class="treeview {{active_menu('categories')[0]}}">
           <a href="#">
             <i class="fa fa-dashboard"></i> <span>{{trans('admin.categories')}}</span>
             <span class="pull-right-container">

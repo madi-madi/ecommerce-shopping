@@ -35,6 +35,8 @@
                   <td>
                     <div v-if="admin.deleted_at === null">
                       <button 
+                  v-if="admin.id != admin_auth"
+
                       class="btn btn-warning"
                       
                        @click="deleteAdmin(admin,index)"
