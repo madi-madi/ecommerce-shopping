@@ -29,6 +29,7 @@ class UpladRequest extends FormRequest
             'title'=>'required',
             'description'=>'required',
             'price'=>'required',
+            'product_count'=>'required',
             'weight'=>'required',
             // 'files'=>'sometimes',
             'category_id'=>'required',

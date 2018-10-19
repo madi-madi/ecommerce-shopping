@@ -19,6 +19,7 @@ class Product extends Model
 			'category_id',
 			'admin_id',
 			'weight',
+            'product_count'
     ];
 
     public function images()

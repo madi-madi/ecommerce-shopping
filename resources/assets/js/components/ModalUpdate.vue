@@ -8,7 +8,7 @@
                 <h4 class="modal-title">Default Modal</h4>
               </div>
               <div class="modal-body">
-                        <p>Create New Product </p>
+                        <p>Update Product </p>
                           <form method="patch" enctype="multipart/form-data" 
                            v-on:submit.prevent="update_product()" id="products">
 

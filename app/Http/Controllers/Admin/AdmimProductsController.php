@@ -86,33 +86,34 @@ class AdmimProductsController extends Controller
             'title'=>request('title'),
             'description'=>request('description'),
             'price'=>request('price'),
+            'product_count'=>request('product_count'),
             'weight'=>request('weight'),
             'category_id'=>request('category_id'),
             'admin_id'=>Auth::guard('admin')->user()->id,
         ]);
 
-        if (request()->has('file_product')) {
-            $files = request('file_product');
+        if (request('file_product')) {
             
-            if (!is_null($files)) {
+            $product_id =$create_product->id;
             foreach ( request('file_product') as  $file) {
 
-            $image = time().'.'.$file->getClientOriginalExtension();
            $filename =  $file->store('public/products');
             $path_imageDB = substr($filename , 7);
             $Upload_img_product = self::$images->create([
-            'product_id'=> $create_product->id,
+            'product_id'=> $product_id,
             'product_image'=>$path_imageDB,
             ]);
-            }
+            // $myfiles[]= $Upload_img_product;
             }
 
         }else{
-       $Upload_img_product = self::$images->create([
+        self::$images->create([
         'product_id'=> $create_product->id,
     
       ]);   
-        }
+      }
+
+        // return $checks;
        $product_with_images =  self::$products
        ->withTrashed()
        ->with('images')
@@ -183,6 +184,7 @@ class AdmimProductsController extends Controller
             'title'=>request('title'),
             'description'=>request('description'),
             'price'=>request('price'),
+            'product_count'=>request('product_count'),
             'weight'=>request('weight'),
             'category_id'=>request('category_id'),
             'admin_id'=>Auth::guard('admin')->user()->id,
@@ -208,7 +210,7 @@ class AdmimProductsController extends Controller
             $myfiles[]= $Upload_img_product;
             }
             $id = request('product_id');
-    $newfiles   = self::$images->where('product_id',$id)->get();
+    // $newfiles   = self::$images->where('product_id',$id)->get();
     return response($myfiles);
             
         }

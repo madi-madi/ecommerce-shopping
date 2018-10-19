@@ -28,6 +28,7 @@ type="button"
     <th>{{trans('admin.description')}}</th>
     <th>{{trans('admin.weight')}}</th>
     <th>{{trans('admin.price')}}</th>
+    <th>{{trans('admin.count')}}</th>
     <th>{{trans('admin.category')}}</th>
     <th>{{trans('admin.crated_by')}}</th>
     <th>{{trans('admin.created_at')}}</th>
@@ -47,6 +48,7 @@ type="button"
     <td>@{{product.description}}</td>
     <td>@{{product.weight}}</td>
     <td>@{{product.price}}</td>
+    <td>@{{product.product_count}}</td>
     <td>@{{product.category['category_name']}}</td>
     <td>@{{product.admin['name']}}</td>
     <td>@{{product.created_at}}</td>
@@ -55,7 +57,7 @@ type="button"
     style="position: relative; display: inline-block;">
     <button class="fa fa-fw fa-close close"
     @click.prevent="deleteImage(photo, index , key)"
-    v-if="product.images.length != 1"
+    v-if="product.images.length != 1 || product.deleted_at != null"
     style="position: absolute; right: 0;top: 0" 
     ></button>    
     <img  
@@ -63,7 +65,7 @@ type="button"
     style="padding: 2px; background-color: #eceaea;" 
     :src="'/storage/'+photo.product_image">
   </figcaption>
-  <span v-if="product.images.length != 6">
+  <span v-if="product.images.length !=  5|| product.images.length < 5">
 <upload-file :product_id = "product.id" v-if="product.deleted_at === null" :key_product ="key"  ></upload-file>
     
   </span>
@@ -123,6 +125,7 @@ type="button"
     <th>{{trans('admin.description')}}</th>
         <th>{{trans('admin.weight')}}</th>
     <th>{{trans('admin.price')}}</th>
+    <th>{{trans('admin.count')}}</th>
     <th>{{trans('admin.crated_by')}}</th>
     <th>{{trans('admin.created_at')}}</th>
     <th>{{trans('admin.created_at')}}</th>

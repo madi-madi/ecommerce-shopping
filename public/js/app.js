@@ -58233,6 +58233,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['openModal'],
@@ -58245,6 +58250,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         description: '',
         files: '',
         price: '',
+        product_count: '',
         weight: '',
         category_id: ''
       },
@@ -58299,6 +58305,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       formData.append('description', this.new_product.description);
       formData.append('weight', this.new_product.weight);
       formData.append('price', this.new_product.price);
+      formData.append('product_count', this.new_product.product_count);
+
       // formData.append('category_id', this.product.category_id)
 
 
@@ -58314,6 +58322,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.$refs.files.value = null;
         _this2.$parent.products.data.unshift(response.data);
         _this2.close();
+        _this2.new_product = {};
 
         // this.$refs.icon.value = null;
         nativeToast({
@@ -58502,6 +58511,46 @@ var render = function() {
                             _vm.$set(
                               _vm.new_product,
                               "price",
+                              _vm._n($event.target.value)
+                            )
+                          },
+                          blur: function($event) {
+                            _vm.$forceUpdate()
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "product_count" } }, [
+                        _vm._v("product_count")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model.number",
+                            value: _vm.new_product.product_count,
+                            expression: "new_product.product_count",
+                            modifiers: { number: true }
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "number",
+                          name: "product_count",
+                          id: "product_count"
+                        },
+                        domProps: { value: _vm.new_product.product_count },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.new_product,
+                              "product_count",
                               _vm._n($event.target.value)
                             )
                           },

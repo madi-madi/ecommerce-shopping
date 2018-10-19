@@ -27,7 +27,12 @@
                             v-model.number="new_product.price" 
                             >
                           </div>
-
+                            <div class="form-group">
+                            <label for="product_count">product_count</label>
+                            <input type="number" name="product_count" id="product_count" class="form-control"
+                            v-model.number="new_product.product_count" 
+                            >
+                          </div>
                             <div class="form-group">
                             <label for="weight">weight</label>
                             <input type="number" name="weight" id="weight" class="form-control" 
@@ -82,6 +87,7 @@
               description:'',
               files:'',
               price:'',
+              product_count:'',
               weight:'',
               category_id:'',
             },
@@ -142,6 +148,8 @@
       formData.append('description', this.new_product.description)
       formData.append('weight', this.new_product.weight)
       formData.append('price', this.new_product.price)
+      formData.append('product_count', this.new_product.product_count)
+
       // formData.append('category_id', this.product.category_id)
 
 
@@ -157,6 +165,8 @@
                         this.$refs.files.value = null;
                         this.$parent.products.data.unshift(response.data);
                         this.close();
+                        this.new_product = {};
+                        
 
                         // this.$refs.icon.value = null;
                     nativeToast({
