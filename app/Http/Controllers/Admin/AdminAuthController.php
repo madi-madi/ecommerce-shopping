@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 use App\Http\Mail\AdminResetPassword;
 use App\Mail;
@@ -12,6 +13,13 @@ use DB;
 
 class AdminAuthController extends Controller
 {
+  public static $admins = Null;
+  public function __construct()
+  {
+    if (self::$admins == Null) {
+            self::$admins = new Admin;
+    }
+  }
   //
     public function login()
     {
@@ -29,6 +37,11 @@ class AdminAuthController extends Controller
       if(admin()->attempt(
 
       ['email'=>request('email'),'password'=>request('password')],$rememberme)){
+        $admin = admin()->user()->id;
+        self::$admins->find($admin)->update([
+          'last_login_at'=> Carbon::now()->toDateTimeString(),
+          'last_login_ip'=> request()->getClientIp()
+        ]);
       return redirect('admin');
       }else{
       session()->flash('error_login',trans('admin.incorrect_admin_login'));

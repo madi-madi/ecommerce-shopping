@@ -91,7 +91,7 @@
   <ul class="menu">
     <li v-for="notify in notification">
       <a href="#">
-        <i class="fa fa-users text-aqua"></i> New User  with name : <b> @{{notify.data.user_name}} </b>
+        <i class="fa fa-users text-aqua"></i> {{trans('admin.new_user_with_name')}} : <b> @{{notify.data.user_name}} </b>
       </a>
     </li>
     <li>
@@ -198,20 +198,31 @@
 </li>
 </ul>
 </li>
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe"></i>
+              <span class="hidden-xs"></span>
+            </a>
+            <ul class="dropdown-menu">
+            <li class="{{session('lang') == 'en'?'alert-info':''}}"  ><a href="{{aurl('lang/en')}}"><i class="fa fa-flag"></i> English</a></li>
+            <li class="{{session('lang') == 'ar'?'alert-info':''}}"  ><a href="{{aurl('lang/ar')}}"><i class="fa fa-flag"></i> العربية</a></li>
+
+
+            </ul>
+          </li>
 <!-- User Account: style can be found in dropdown.less -->
 <li class="dropdown user user-menu">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-<img src="{{url('design/adminlte')}}/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-<span class="hidden-xs">Alexander Pierce</span>
+<img src="{{Storage::url(settings()->logo)}}" class="user-image" alt="User Image" title="{{admin()->user()->name}}">
+<span class="hidden-xs">{{admin()->user()->name}}</span>
 </a>
 <ul class="dropdown-menu">
 <!-- User image -->
 <li class="user-header">
-  <img src="{{url('design/adminlte')}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+  <img src="{{Storage::url(settings()->logo)}}" class="img-circle" alt="User Image" title="{{admin()->user()->name}}">
 
   <p>
-    Alexander Pierce - Web Developer
-    <small>Member since Nov. 2012</small>
+    {{admin()->user()->name}} - {{trans('admin.web_developer')}}
+    <small>{{trans('admin.devme')}}</small>
   </p>
 </li>
 <!-- Menu Body -->
@@ -235,7 +246,7 @@
     <a href="#" class="btn btn-default btn-flat">Profile</a>
   </div>
   <div class="pull-right">
-    <a href="{{aurl('logout')}}" class="btn btn-default btn-flat">Sign out</a>
+    <a href="{{aurl('logout')}}" class="btn btn-default btn-flat">{{trans('admin.sign_out')}}</a>
   </div>
 </li>
 </ul>

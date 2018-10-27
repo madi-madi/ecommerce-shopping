@@ -1,10 +1,19 @@
 @extends('admin.index')
 @section('content')
 <div class="box" :admin_auth="{{Request::user('admin')->id}}">
-    <modal-component :open-modal="showView" @closemodal="close"  ></modal-component>
+    <modal-component :trans="{{json_encode(trans('admin'))}}" :open-modal="showView" @closemodal="close"  ></modal-component>
+    <modal-create-user :trans="{{json_encode(trans('admin'))}}"  :open-modal="showAdd"  @closemodal="close"></modal-create-user>
+
 
   <div class="box-header">
     <h3 class="box-title">{{ $title }}</h3>
+      <br>
+    <button 
+class="btn btn-primary"
+@click.prevent="openCreate()"
+type="button" 
+><i class="fa fa-user-plus
+ fa-lg" ></i>{{trans('admin.add_user')}} </button>
   </div>
   <!-- /.box-header -->
   <div class="box-body" >

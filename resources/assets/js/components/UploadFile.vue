@@ -63,7 +63,7 @@ multiple
       formData.append('product_id',this.product.prduct_id)
 
 
-            axios.post(`upload/file/product`,formData,{
+            axios.post(`http://127.0.0.1:8000/admin/upload/file/product`,formData,{
                 headers:{
                 'Content-Type': 'multipart/form-data'
 

@@ -1,7 +1,7 @@
 <?php
 
 namespace App;
-
+use App\Scopes\ProductAdminScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -19,8 +19,24 @@ class Product extends Model
 			'category_id',
 			'admin_id',
 			'weight',
-            'product_count'
+            'product_count',
+            'discount',
+            'from',
+            'to'
     ];
+
+    // protected static function boot()
+    // {
+    //     parent::boot();
+    //     static::addGlobalScope(new ProductAdminScope);
+    // }
+    // protected $timesstamps= false;
+    // $dateFormat ='U';
+    // const CREATED_AT ='creation_date';
+    // const UPDATED_AT = 'last_update';
+    // protected $connection = 'connection-name';
+        protected $guarded = ['deleted_at'];
+
 
     public function images()
     {

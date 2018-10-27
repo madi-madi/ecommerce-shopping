@@ -33,6 +33,13 @@ Route::group(['middleware'=> 'admin:admin'], function(){
 	Route::post('admin/{id}/restore',['middleware'=>'update:SuperAdmin,Admin','as'=>'restore.admin','uses'=>'AdminsController@restoreAdmin']);
 	Route::delete('admin/{id}/deleteforever',['middleware'=>'delete:SuperAdmin,Admin','as'=>'deleteforever.admin','uses'=>'AdminsController@deleteforeverAdmin']);
 	Route::patch('admin/{id}/update',['middleware'=>'update:SuperAdmin,Admin','as'=>'update.admin','uses'=>'AdminsController@updateAdmin']);
+	// create new admin 
+	Route::post('create/admin','AdminsController@storeAdmin')->name('create.admin');
+	// create new user 
+	Route::post('create/user','AdminUsersController@storeUser')->name('create.user');
+
+	// get all roles
+	Route::get('roles/{id}/admin','AdminsController@getRoles')->name('roles.admin');
 
 	//  AdmimProductsController
 	Route::get('products','AdmimProductsController@index')->name('products');
@@ -51,8 +58,19 @@ Route::group(['middleware'=> 'admin:admin'], function(){
 	// product upload/file/product
 	Route::post('upload/file/product','AdmimProductsController@upload_new_file_product');
 
+	/* CategoriesController */
+	Route::get('categories/all','AdmimProductsController@getCategoriesAll');
+	Route::post('category/create','AdmimProductsController@createCategory');
+	Route::get('category/{category_slug}','AdmimProductsController@getProducsInCategory');
+
+	// roles
+	Route::get('roles','AdminsController@indexRole')->name('roles');
+	Route::post('role/create','AdminsController@createRole');
+
 	// notification/admin
 	Route::get('notification/admin','AdminUsersController@notificationAdmin');
+	Route::get('notifications','AdminsController@notification')->name('notifications');
+
 
 
 
@@ -69,6 +87,27 @@ Route::group(['middleware'=> 'admin:admin'], function(){
         return back();
 
     });
+
+    // Localization
+Route::get('/js/lang.js', function () {
+    $strings = Cache::rememberForever('lang.js', function () {
+        $lang = config('app.locale');
+
+        $files   = glob(resource_path('lang/' . $lang . '/*.php'));
+        $strings = [];
+
+        foreach ($files as $file) {
+            $name           = basename($file, '.php');
+            $strings[$name] = require $file;
+        }
+
+        return $strings;
+    });
+
+    header('Content-Type: text/javascript');
+    echo('window.i18n = ' . json_encode($strings) . ';');
+    exit();
+})->name('assets.lang');
 
 });
 

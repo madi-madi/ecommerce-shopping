@@ -5,6 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="admin" content="{{Request::user('admin')->id}}">
+  <meta name="category_slug" content="{{session('category_slug')}}">
+
 
   <title>AdminLTE 2 | Dashboard</title>
   <!-- Tell the browser to be responsive to screen width -->
@@ -15,8 +17,27 @@
   <link rel="stylesheet" href="{{url('design/adminlte')}}/bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="{{url('design/adminlte')}}/bower_components/Ionicons/css/ionicons.min.css">
+  
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{url('design/adminlte')}}/dist/css/AdminLTE.min.css">
+  {{-- <link rel="stylesheet" href="{{url('design/adminlte')}}/dist/css/AdminLTE.min.css"> --}}
+    @if(direction() == 'ltr')
+  <link rel="stylesheet" href="{{url('/')}}/design/adminlte/dist/css/AdminLTE.min.css">
+  @else
+  <link rel="stylesheet" href="{{url('/')}}/design/adminlte/dist/css/rtl/AdminLTE.min.css">
+  <link rel="stylesheet" href="{{url('/')}}/design/adminlte/dist/css/rtl/bootstrap-rtl.min.css">
+  <link rel="stylesheet" href="{{url('/')}}/design/adminlte/dist/css/rtl/profile.css">
+  <link rel="stylesheet" href="{{url('/')}}/design/adminlte/dist/css/rtl/rtl.css">
+
+
+  @endif
+    <link href="https://fonts.googleapis.com/css?family=Cairo:300,400,600,700&amp;subset=arabic,latin-ext" rel="stylesheet">
+
+  <style type="text/css">
+    html,body,*,h1,h2,h3,h4,h5,h6{
+      font-family: 'Cairo', sans-serif;
+
+    }
+  </style>
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{url('design/adminlte')}}/dist/css/skins/_all-skins.min.css">

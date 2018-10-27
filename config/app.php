@@ -66,6 +66,8 @@ return [
     */
 
     'timezone' => 'UTC',
+    'date_format'=>'m/d/Y',
+    'date_format_js'=>'mm/dd/yy',
 
     /*
     |--------------------------------------------------------------------------
@@ -146,6 +148,9 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        // lang vue 
+        KgBot\LaravelLocalization\LaravelLocalizationServiceProvider::class,
+        Stevebauman\Location\LocationServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -209,6 +214,10 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Upload' => App\Http\Controllers\UploadController::class,
+        "ExportLocalization" => KgBot\LaravelLocalization\Facades\ExportLocalizations::class,
+        'Location' => Stevebauman\Location\Facades\Location::class,
+
+
 
     ],
 

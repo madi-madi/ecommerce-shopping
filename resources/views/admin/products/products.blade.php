@@ -2,8 +2,8 @@
 @section('content')
 <div class="box">
 
-    <modal-create :open-modal="showAdd" @closemodal="close" ></modal-create>
-    <modal-update :open-modal="showView" @closemodal="close" ></modal-update>
+    <modal-create :trans="{{json_encode(trans('admin'))}}" :open-modal="showAdd" @closemodal="close" ></modal-create>
+    <modal-update :trans="{{json_encode(trans('admin'))}}" :open-modal="showView"  @closemodal="close" ></modal-update>
 
 
   <div class="box-header">
@@ -49,7 +49,7 @@ type="button"
     <td>@{{product.weight}}</td>
     <td>@{{product.price}}</td>
     <td>@{{product.product_count}}</td>
-    <td>@{{product.category['category_name']}}</td>
+    <td><a :href="'category/'+product.category['category_slug']">@{{product.category['category_name']}}</a> </td>
     <td>@{{product.admin['name']}}</td>
     <td>@{{product.created_at}}</td>
     <td>
@@ -57,7 +57,7 @@ type="button"
     style="position: relative; display: inline-block;">
     <button class="fa fa-fw fa-close close"
     @click.prevent="deleteImage(photo, index , key)"
-    v-if="product.images.length != 1 || product.deleted_at != null"
+    v-if="product.images.length != 1 && product.deleted_at === null"
     style="position: absolute; right: 0;top: 0" 
     ></button>    
     <img  

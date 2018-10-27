@@ -35,7 +35,9 @@
     style="border-radius: 50%;"
     width="100px" height="100px" 
     >
-    <a href="../../index2.html"><b>{{trans('admin.app_name')}}</b></a>
+    {{-- {{trans('admin.app_name')}} --}}
+    <a href="../../index2.html"><b></b></a>
+    <p><b>{{session('lang')== 'ar'?settings()->site_name_ar : settings()->site_name_en}}</b></p>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">

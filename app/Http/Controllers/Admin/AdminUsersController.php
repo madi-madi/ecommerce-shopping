@@ -21,12 +21,31 @@ class AdminUsersController extends Controller
     {
         if (request()->ajax() ) {
         # code...
-        $users = self::$user->withTrashed()->paginate(10);
+        $users = self::$user->withTrashed()->orderBy('id','desc')->paginate(10);
         return response($users);
 
         }
 
         return view ('admin.users', ['title'=>trans('admin.user_title')]);
+    }
+
+    public function storeUser()
+    {
+        $data = $this->validate(request(),[
+            'name'=>'required',
+            'email'=>'required|email|unique:users',
+            'password'=>'required|min:6',
+        ],[],[
+        'name'=> trans('admin.name'),
+        'email'=> trans('admin.email'),
+        'password'=> trans('admin.password'),
+        ]);
+        $data['password'] = bcrypt(request('password'));
+        $newUser = self::$user->create($data);
+        $newUser = self::$user->withTrashed()->find($newUser->id);
+
+        return response($newUser);
+        
     }
 
     public function deleteUser($id)

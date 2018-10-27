@@ -7,12 +7,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header" >
       <h1>
-        Dashboard
-        <small>Control panel</small>
+        {{trans('admin.dashboard')}}
+        <small>{{trans('admin.control_panel')}}</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> {{trans('admin.home')}}</a></li>
+        <li class="active">{{trans('admin.dashboard')}}</li>
       </ol>
     </section>
 

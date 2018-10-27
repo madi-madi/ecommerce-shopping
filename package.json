@@ -20,6 +20,7 @@
         "vue": "^2.5.17"
     },
     "dependencies": {
+        "lang.js": "^1.1.12",
         "laravel-echo": "^1.4.0",
         "native-toast": "^2.0.0",
         "pusher-js": "^4.3.1",

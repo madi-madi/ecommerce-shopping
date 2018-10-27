@@ -2,6 +2,8 @@
 <html lang="{{app()->getLocale()}}">
     <head>
         <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+        
         <link rel="shortcut icon" type="image/png" href=""/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- Compatibility Meta IE -->
         <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- First Mobile Meta -->
@@ -15,50 +17,103 @@
         <link rel="stylesheet" type="text/css" href="{{url('frontend')}}/css/slick-theme.css"/>
 
         <link rel="stylesheet" href="{{url('frontend')}}/css/style.css">
+
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
             <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <style type="text/css">
+            nav.navbar ul li a {
+                line-height: 80px;
+                padding: 0 25px;
+                text-align: center;
+                border-left: 1px solid #d3d3d3;
+            }
+             nav.navbar{
+                margin-bottom: 0px;
+             }
+
+            .navbar-default {
+            background-color: #ffffff;
+            border-color: #ffffff;
+            }
+             nav.navbar ul li a i span.badge{
+                background-color: var(--mainColor)
+             }
+             nav.navbar img.logo{
+                border-radius: 50%;
+             }
+        </style>
     </head>
-    <body>
+    <body >
+        <div class="content" id="frontend">
         <!-- Navbar-top -->
         <section class="navbar-top">
+
             <div class="row-me">
-                <div class="logo-top"><a href=""><img src="{{url('frontend')}}/images/logo.png" alt="" /></a></div>
-                <div class="right-top-ul">
-                    <ul>
-                        @if(Route::has('login'))
-                        @auth
-                        <li><a href="{{ url('/home') }}"><i class="fa fa-home fa-fw"></i></a></li>
-                        @else
-                        <li><a href="{{ url('login') }}"><i class="fa fa-user fa-fw"></i></a></li>
-                        <li><a href="{{ url('/register') }}"><i class="fa fa-user-plus fa-fw"></i></a></li>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"><img src="{{Storage::url(settings()->logo)}}" class="logo img-responsive" width="60" height="60"></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+{{--       <ul class="nav navbar-nav">
+
+      </ul> --}}
+
+      <ul class="nav navbar-nav navbar-right">
+        @if(Route::has('login'))
+        @auth
+        {{-- <li><a href="#">Link</a></li> --}}
+        <li><a href="{{ url('/home') }}"><i class="fa fa-home fa-lg"></i></a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li>
+            <a class="dropdown-item" href="{{ route('logout') }}"
+            onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();">
+            {{ __('Logout') }}
+            </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+            </form>
+            </li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+        @else
+        <li><a href="{{ url('login') }}"><i class="fa fa-user fa-lg"></i></a></li>
+        <li><a href="{{ url('/register') }}"><i class="fa fa-user-plus fa-lg"></i></a></li>
                         @endauth
                         @endif
-                        <!-- 
-                        --><li><a href=""><i class="fa fa-shopping-cart" aria-hidden="true"><span class="num-top">2</span></i></a></li><!--
-                        --><li><a href=""><i class="fa fa-search fa-fw"></i></a></li>
-                    </ul>
-                </div>
+        <li><a href=""><i class="fa fa-shopping-cart fa-lg" aria-hidden="true"><span class="badge badge-info">2</span></i></a></li>
+        <li><a href=""><i class="fa fa-search fa-lg"></i></a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+   {{--              <div class="logo-top"><a href=""><img src="{{url('frontend')}}/images/logo.png" alt="" /></a></div> --}}
+
             </div>
         </section>
         <!-- Navbar-top -->
 
         <!-- Main Navbar -->
-        <section class="main-navbar">
-            <div class="menu-toggle">
-                <button type="button" class="btn"><i class="fa fa-bars" aria-hidden="true"></i></button>
-                
-            </div>
-            <ul class="text-center main-nav">
-                <li><a href="">Woman</a></li>
-                <li><a href="">Man</a></li>
-                <li><a href="">Kids</a></li>
-                <li><a href="">Sale</a></li>
-                <li><a href="">Blog</a></li>
-                <li><a href="">Contact</a></li>
-            </ul>
-        </section>
+
         <!-- Main Navbar -->
 
         <!-- Big Hero slider -->
@@ -238,75 +293,14 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-sm-6">
-                        <div class="gifts-item" style="background: url({{url('frontend')}}/images/gifts2.jpg) no-repeat center; background-size: cover">
-                            <div class="gifts-caption text-center">
-                                <h3>Date night looks for him</h3>
-                                <p>
-                                    She’ll fall head over heels
-                                    dor these styles
-                                </p>
-                                <a href="" class="btn btn-default round-me text-uppercase">SHOP NOW</a>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="col-md-4 col-sm-6" v-for="product in products.data">
+                        <div class="gifts-item" 
+                        style="max-width: 360px; max-height:470px;background:rgb(172, 172, 172); " 
+                        >
+                        <img :src="'/storage/'+product.images[0].product_image" alt="" class="img-responsive">
 
-                    <div class="col-md-4 col-sm-6">
-                        <div class="gifts-item" style="background: url({{url('frontend')}}/images/gifts3.jpg) no-repeat center; background-size: cover">
                             <div class="gifts-caption text-center">
-                                <h3>Date night looks for him</h3>
-                                <p>
-                                    She’ll fall head over heels
-                                    dor these styles
-                                </p>
-                                <a href="" class="btn btn-default round-me text-uppercase">SHOP NOW</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-6">
-                        <div class="gifts-item" style="background: url({{url('frontend')}}/images/gifts4.jpg) no-repeat center; background-size: cover">
-                            <div class="gifts-caption text-center">
-                                <h3>Date night looks for him</h3>
-                                <p>
-                                    She’ll fall head over heels
-                                    dor these styles
-                                </p>
-                                <a href="" class="btn btn-default round-me text-uppercase">SHOP NOW</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-6">
-                        <div class="gifts-item" style="background: url({{url('frontend')}}/images/gifts5.jpg) no-repeat center; background-size: cover">
-                            <div class="gifts-caption text-center">
-                                <h3>Date night looks for him</h3>
-                                <p>
-                                    She’ll fall head over heels
-                                    dor these styles
-                                </p>
-                                <a href="" class="btn btn-default round-me text-uppercase">SHOP NOW</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-6">
-                        <div class="gifts-item" style="background: url({{url('frontend')}}/images/gifts6.jpg) no-repeat center; background-size: cover">
-                            <div class="gifts-caption text-center">
-                                <h3>Date night looks for him</h3>
-                                <p>
-                                    She’ll fall head over heels
-                                    dor these styles
-                                </p>
-                                <a href="" class="btn btn-default round-me text-uppercase">SHOP NOW</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-6">
-                        <div class="gifts-item" style="background: url({{url('frontend')}}/images/gifts2.jpg) no-repeat center; background-size: cover">
-                            <div class="gifts-caption text-center">
-                                <h3>Date night looks for him</h3>
+                                <h3>@{{product.title}}</h3>
                                 <p>
                                     She’ll fall head over heels
                                     dor these styles
@@ -316,7 +310,13 @@
                         </div>
                     </div>
                 </div>
+                <pagination-component
+                :pagination="products"
+                @paginate="getProducts()"
+                :offset="4"
+                ></pagination-component>
             </div>
+
         </section>
         <!-- featured gitfts -->
 
@@ -379,7 +379,10 @@
                             </div>
                         </div>
                     </div>
+               
+
                 </div>
+                {{-- <div v-for="product in products.data">@{{product.id}}</div> --}}
 
                 <div class="title1">
                     <h4>New in today</h4>
@@ -567,6 +570,7 @@
             </div>
         </footer>
         <!-- ---------------------------- End Footer ----------------------------------- -->
+       </div>
         <script src="{{url('frontend')}}/js/jquery-1.12.0.min.js"></script>
         <script type="text/javascript" src="{{url('frontend')}}/js/migrate.js"></script>
         <script src="{{url('frontend')}}/js/bootstrap.min.js"></script>
@@ -576,5 +580,7 @@
 
         <script type="text/javascript" src="{{url('frontend')}}/js/slick.js"></script>
         <script src="{{url('frontend')}}/js/plugin.js"></script>
+    <script src="{{ asset('js/frontend.js') }}" ></script>
+
     </body>
 </html>

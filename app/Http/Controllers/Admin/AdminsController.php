@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Admin;
 use App\Role;
+use Location;
 
 class AdminsController extends Controller
 {
@@ -29,11 +30,34 @@ class AdminsController extends Controller
     public function index()
     {
         // dd($admins);withTrashed
+
+        // $ip= \Request::getClientIp();
+        // $data = Location::get($ip);
+        // dd($data,$ip);
         if (request()->ajax()) {
-        $admins = self::$admins->withTrashed()->with('roles')->paginate(10);
+        $admins = self::$admins->withTrashed()->with('roles')->orderBy('id','desc')->paginate(10);
         return response($admins);
         }
         return view('admin.admins',['title'=>trans('admin.admins_cp')]);
+    }
+
+    public function storeAdmin()
+    {
+        $data = $this->validate(request(),[
+            'name'=>'required',
+            'email'=>'required|email|unique:admins',
+            'password'=>'required|min:6',
+            'role_id'=>'required|numeric',
+        ],[],[
+        'name'=> trans('admin.name'),
+        'email'=> trans('admin.email'),
+        'password'=> trans('admin.password'),
+        'role_id'=> trans('admin.role_id'),
+        ]);
+        $data['password'] = bcrypt(request('password'));
+        $newAdmin = self::$admins->create($data);
+        $newAdminWithRoles = self::$admins->withTrashed()->with('roles')->find($newAdmin->id);
+        return response($newAdminWithRoles);
     }
 
 
@@ -101,6 +125,42 @@ class AdminsController extends Controller
         }
 
         $admin = self::$admins->where('id',$id)->update($data);
+
+    }
+
+    public function getRoles($id)
+    {
+        if (request()->ajax()) {
+        $roles = self::$roles->all();
+        return response($roles);
+        }
+    }
+
+    public function indexRole()
+    {
+        if (request()->ajax()) {
+             $roles = self::$roles->with('admin')->paginate(10);
+        return response($roles);   
+        }
+        return view('admin.roles.roles',['title'=>trans('admin.roles')]);
+
+    }
+
+    public function createRole()
+    {
+    // return request()->all();
+    $this->validate(request(),[
+    'role_name'=>'required|unique:roles',
+    ],[
+    'role_name'=>trans('admin.role_name'),
+    ],[]);
+
+    $create_role = self::$roles->create([
+    'role_name'=>request('role_name'),
+    'admin_id'=>admin()->user()->id,
+
+    ]);
+    return response($create_role);
 
     }
 

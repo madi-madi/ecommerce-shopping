@@ -19,19 +19,33 @@ class Admin extends Authenticatable
     protected $table = "admins";
      // protected $primaryKey = 'yourPrimaryKey';
         protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','role_id','last_login_at','last_login_ip'
     ];
         protected $hidden = [
         'password', 'remember_token',
     ];
+
+        // protected $guarded = ['deleted_at'];
+
 
     public function roles()
     {
         return $this->belongsTo('App\Role','role_id');
     }
 
-    public function productsme(){
+    public function productsme()
+    {
         return $this->hasMany('App\Product','admin_id');
+    }
+
+    public function categories()
+    {
+        return $this->hasMany('App\Category','admin_id');
+    }
+
+        public function roles_created()
+    {
+        return $this->hasMany('App\Role','admin_id');
     }
     public function hasRole($title)
     {

@@ -26,6 +26,14 @@ Vue.component('modal-component', require('./components/ModalComponent.vue'));
 Vue.component('modal-create', require('./components/ModalCreate.vue'));
 Vue.component('modal-update', require('./components/ModalUpdate.vue'));
 Vue.component('upload-file', require('./components/UploadFile.vue'));
+Vue.component('modal-create-category', require('./components/ModalCreateCategory.vue'));
+Vue.component('modal-create-admin', require('./components/ModalCreateAdmin.vue'));
+Vue.component('modal-create-user', require('./components/ModalCreateUser.vue'));
+Vue.component('modal-create-role', require('./components/ModalCreateRole.vue'));
+
+
+
+
 
 
 
@@ -40,10 +48,11 @@ const app = new Vue({
         admin_auth :0,
         'showView':false,
         showAdd:false,
+        showAddCategory:false,
         block:false,
         file:'',
         sound:'http://soundbible.com/mp3/Air Plane Ding-SoundBible.com-496729130.mp3',
-        categories:[],
+        activeCategory:document.head.querySelector('meta[name="category_slug"]').content,
         // http://soundbible.com/mp3/Elevator Ding-SoundBible.com-685385892.mp3
         notification:[],
         users: {
@@ -67,33 +76,59 @@ const app = new Vue({
             to: 0,
             current_page: 1
         },
-
+        productsCat: {
+            total: 0,
+            per_page: 2,
+            from: 1,
+            to: 0,
+            current_page: 1
+        },
+        categories: {
+            total: 0,
+            per_page: 2,
+            from: 1,
+            to: 0,
+            current_page: 1
+        },
+        roles: {
+            total: 0,
+            per_page: 2,
+            from: 1,
+            to: 0,
+            current_page: 1
+        },
         settings:[],
 
     }
     },
     created(){
-        // console.log(this.$children[1]);
-        // console.log(this.$children[2]);
-
-    if (window.location.pathname === '/admin/settings') {
-
-        this.getSettings()
-
-    }
 this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
-// console.log('dddddddd '+this.admin_auth)
+        this.getNotification();
 
     Echo.private('App.Admin.' + this.admin_auth)
     .notification((notification) => {
-        // console.log(notification);
         this.notification.unshift(notification)
         if(this.sound) {
         var audio = new Audio(this.sound);
         audio.play();
       }
     });
+
+    if (window.location.pathname === '/admin/settings') {
+
+    this.getSettings()
+
+    }
+    if (window.location.pathname === '/admin/categories') {
     this.getCategories();
+
+    }
+
+    if (window.location.pathname === '/admin/roles') {
+        this.getRoles();
+    }
+
+
     },
     mounted(){
     if (window.location.pathname === '/admin/users') {
@@ -101,11 +136,17 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
     	this.getUsers();
     }else if (window.location.pathname === '/admin/admins') {
         this.getAdmins()
-    }
-    // if (this.admin_auth) {
-        this.getNotification();
-    // }
+    }else if (window.location.pathname === '/admin/products') {
      this.getProducts();
+
+    }else if (window.location.pathname === '/admin/category/'+this.activeCategory) {
+    this.getProductCat();
+
+    }
+        // this.activeCategory = document.head.querySelector('meta[name="category_slug"]').content;
+
+    // if (this.admin_auth) {
+    // }
 
     },
     methods:{
@@ -245,7 +286,8 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             }else if (path_request === '/admin/users') {
             this.$children[0].admin= this.users.data[index] // children props
 
-            }else if (path_request === '/admin/products') {
+            }else if (path_request === '/admin/products' ||
+             path_request === '/admin/category/'+this.activeCategory) {
             this.$children[1].product= this.products.data[index] // children props
 
             }
@@ -262,10 +304,29 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             console.log('handle server error from here');
             });
         },
+        getProductsByCategory(category) {
+
+            // axios.get(`/admin/category/${category.category_slug}?page=${this.products.current_page}`)
+            // .then((response) => {
+            // })
+            // .catch((error) => {
+            // console.log('handle server error from here');
+            // });                
+        },
+        getProductCat(){
+            axios.get(`/admin/category/${this.activeCategory}?page=${this.productsCat.current_page}`)
+            .then((response) => {
+                console.log(response.data);
+            this.productsCat = response.data;
+            })
+            .catch((error) => {
+            console.log('handle server error from here');
+            });
+        },
         deleteImage(photo , index , ind){
             console.log(this.products.data[ind])
 
-            axios.delete(`image/${photo.id}/delete`).then((response)=>{
+            axios.delete(`http://127.0.0.1:8000/admin/image/${photo.id}/delete`).then((response)=>{
                 this.products.data[ind].images.splice(index,1 )
             }).catch((error)=>{})
         },
@@ -277,8 +338,15 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         },
         // product 
         deleteProduct(product ,index){
-            axios.delete(`product/${product.id}/delete`).then((response)=>{
+            console.log(product);
+            axios.delete(`http://127.0.0.1:8000/admin/product/${product.id}/delete`).then((response)=>{
+            if (window.location.pathname === '/admin/category/'+this.activeCategory) {
+            console.log(this.productsCat.data[index].deleted_at = response.data.deleted_at)
+
+            }else{
             console.log(this.products.data[index].deleted_at = response.data.deleted_at)
+
+            }
             })
             .catch((error)=>{
             nativeToast({
@@ -292,28 +360,53 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             }) 
         },
         restoreProduct(product ,index){
-           axios.post(`product/${product.id}/restore`).then((response)=>{
+           axios.post(`http://127.0.0.1:8000/admin/product/${product.id}/restore`).then((response)=>{
+            if (window.location.pathname === '/admin/category/'+this.activeCategory) {
+            console.log(this.productsCat.data[index].deleted_at = response.data.deleted_at)
+
+            }else{
             console.log(this.products.data[index].deleted_at = response.data.deleted_at)
+
+            }
+            
            })
            .catch((error)=>{
             console.error(error.type);
            }) 
         }, 
         deleteforeverProduct(product ,index){
-           axios.delete(`product/${product.id}/deleteforever`).then((response)=>{
+           axios.delete(`http://127.0.0.1:8000/admin/product/${product.id}/deleteforever`).then((response)=>{
             console.info(response);
+            if (window.location.pathname === '/admin/category/'+this.activeCategory) {
+                this.productsCat.data.splice(index,1)
+
+            }else{
                 this.products.data.splice(index,1)
+
+            }
+
            })
            .catch((error)=>{
             console.error(error.type);
            }) 
         },
         getCategories(){
-            axios.get('categories').then((response)=>{
+            axios.get('categories/all').then((response)=>{
             console.info(response);
             this.categories = response.data
             }).catch((error)=>{})
 
+        },
+
+        // admin roles
+                getRoles() {
+            axios.get(`/admin/roles?page=${this.roles.current_page}`)
+            .then((response) => {
+            this.roles = response.data;
+            })
+            .catch(() => {
+            console.log('handle server error from here');
+            });
         },
 
 

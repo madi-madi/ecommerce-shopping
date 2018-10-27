@@ -21,11 +21,7 @@
 // });
 Route::group(['middleware'=>'maintenance'],function(){
 
-Route::get('/', function () {
-	// $string=exec('getmac');
-	// dd(GetMAC());
-    return view('welcome');
-});
+Route::get('/', 'frontendProductController@index');
 Route::get('verifyEmailFirst','Auth\RegisterController@verifyEmailFirst')->name('verifyEmailFirst');
 Route::get('verification/{email}/{verifyToken}','Auth\RegisterController@verificationDone')->name('verification');
 

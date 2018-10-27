@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Providers;
-
+use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Support\ServiceProvider;
+use App\Product;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Product::observer(ProductObserver::class);
+         Resource::withoutWrapping();
     }
 
     /**

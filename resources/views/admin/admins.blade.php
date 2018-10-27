@@ -1,9 +1,16 @@
 @extends('admin.index')
 @section('content')
 <div class="box">
-    <modal-component :open-modal="showView" @closemodal="close" ></modal-component>
+    <modal-component :trans="{{json_encode(trans('admin'))}}" :open-modal="showView" @closemodal="close" ></modal-component>
+    <modal-create-admin :trans="{{json_encode(trans('admin'))}}" :open-modal="showAdd" :admin_id ="{{admin()->user()->id}}" @closemodal="close"></modal-create-admin>
   <div class="box-header">
     <h3 class="box-title">{{ $title }}</h3>
+    <br>
+    <button 
+class="btn btn-primary"
+@click.prevent="openCreate()"
+type="button" 
+>{{trans('admin.add_admin')}} </button>
   </div>
   <!-- /.box-header -->
   <div class="box-body">

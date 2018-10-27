@@ -1,19 +1,19 @@
 
         <!-- Navbar-top -->
-        <section class="navbar-top">
+        <section class="navbar-top" id="frontend">
             <div class="row-me">
                 <div class="logo-top"><a href=""><img src="{{Storage::url(settings()->logo)}}" alt="" width="75" height="75" style="border-radius: 50%;" /></a></div>
                 <div class="right-top-ul">
                     <ul>
                         @if(Route::has('login'))
                         @auth
-                        <li><a href="{{ url('/home') }}"><i class="fa fa-home fa-fw"></i></a></li>
+                        {{-- <li><a href="{{ url('/home') }}"><i class="fa fa-home fa-fw"></i></a></li> --}}
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style=" margin: 0px -5px 0 !important;">
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
