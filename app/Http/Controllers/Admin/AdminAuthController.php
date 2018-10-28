@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use App\Http\Mail\AdminResetPassword;
-use App\Mail;
+use App\Mail\AdminResetPassword;
+use Mail;
 use App\Admin;
 use Carbon\Carbon;
 use DB;
@@ -29,7 +29,6 @@ class AdminAuthController extends Controller
 
     public function dologin()
     {
-      //  dd($request->all());
       $rememberme = request('rememberme') == 1 ?true:false;
       admin()->attempt(
 
@@ -58,7 +57,7 @@ class AdminAuthController extends Controller
 
     public function forgot_password()
     {
-        return view('admin.forgot_password');
+        return view('admin.forgot_password',['title'=>trans('admin.forgot_password')]);
     }
 
     public function forgot_password_post()
@@ -73,11 +72,7 @@ class AdminAuthController extends Controller
       'created_at'=> Carbon::now()
       ]);
       // return new AdminResetPassword(['data'=>$admin,'token'=>$token]);
-      Mail::to($admin->email)
-      ->send(new AdminResetPassword([
-      'data'=>$admin,
-      'token'=>$token])
-      );
+      Mail::to($admin->email)->send(new AdminResetPassword(['data'=>$admin,'token'=>$token]));
       session()->flash('success',trans('admin.the_link_reset_password_sent'));
       return back();             
       }

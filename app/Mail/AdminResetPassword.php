@@ -10,15 +10,17 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class AdminResetPassword extends Mailable
 {
     use Queueable, SerializesModels;
+    protected $data = [];
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data=[])
     {
-        //
+         $this->data = $data ;
+        
     }
 
     /**
@@ -28,6 +30,6 @@ class AdminResetPassword extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.reset_admin_password');
+        return $this->markdown('emails.reset_admin_password')->subject('Reset Admin Password')->with(['data'=>$this->data]);
     }
 }
