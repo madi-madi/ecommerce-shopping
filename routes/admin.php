@@ -4,10 +4,15 @@ Route::group(['prefix'=> 'admin', 'namespace'=>'Admin'], function(){
 	Config::set('auth.defines', 'admin');
 Route::get('login','AdminAuthController@login')->name('login');
 Route::post('login','AdminAuthController@dologin');
+// forgot
 Route::get('forgot/password', 'AdminAuthController@forgot_password');
+// create token and send email reset
 Route::post('forgot/password', 'AdminAuthController@forgot_password_post');
+// reset view
 Route::get('reset/password/{token}' , 'AdminAuthController@reset_password');
+// reset password
 Route::post('reset/password/{token}' , 'AdminAuthController@reset_password_final');
+
 Route::group(['middleware'=> 'admin:admin'], function(){
 
 
@@ -69,7 +74,7 @@ Route::group(['middleware'=> 'admin:admin'], function(){
 
 	// notification/admin
 	Route::get('notification/admin','AdminUsersController@notificationAdmin');
-	Route::get('notifications','AdminsController@notification')->name('notifications');
+	Route::get('notifications','AdminsController@indexNotification')->name('notifications');
 
 
 
@@ -88,26 +93,7 @@ Route::group(['middleware'=> 'admin:admin'], function(){
 
     });
 
-    // Localization
-Route::get('/js/lang.js', function () {
-    $strings = Cache::rememberForever('lang.js', function () {
-        $lang = config('app.locale');
 
-        $files   = glob(resource_path('lang/' . $lang . '/*.php'));
-        $strings = [];
-
-        foreach ($files as $file) {
-            $name           = basename($file, '.php');
-            $strings[$name] = require $file;
-        }
-
-        return $strings;
-    });
-
-    header('Content-Type: text/javascript');
-    echo('window.i18n = ' . json_encode($strings) . ';');
-    exit();
-})->name('assets.lang');
 
 });
 

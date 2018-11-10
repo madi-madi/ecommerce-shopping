@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Admin;
 use App\Role;
+use App\Notification;
 use Location;
 
 class AdminsController extends Controller
@@ -15,6 +16,7 @@ class AdminsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public static $admins = Null;
+    public static $notifications = Null;
     public static $roles = Null;
 
     public function __construct()
@@ -25,6 +27,10 @@ class AdminsController extends Controller
 
         if (self::$roles == Null) {
             self::$roles = new Role;
+        }
+
+        if (self::$notifications == Null) {
+            self::$notifications = new Notification;
         }
     }
     public function index()
@@ -148,7 +154,6 @@ class AdminsController extends Controller
 
     public function createRole()
     {
-    // return request()->all();
     $this->validate(request(),[
     'role_name'=>'required|unique:roles',
     ],[
@@ -160,8 +165,19 @@ class AdminsController extends Controller
     'admin_id'=>admin()->user()->id,
 
     ]);
-    return response($create_role);
+    $created_role = self::$roles->with('admin')->find($create_role->id);
 
+    return response($created_role);
+
+    }
+
+    public function indexNotification()
+    {
+     $notifications  =   self::$notifications->paginate(20);
+     if (request()->ajax()) {
+         return response($notifications);
+     }
+        return view('admin.notifications.notifications',['title'=>trans('admin.notifications')]);
     }
 
 

@@ -5,32 +5,23 @@
               <div class="modal-header">
                 <button type="button" class="close">
                   <span aria-hidden="true" @click="close">×</span></button>
-                <h4 class="modal-title">{{trans.update}}  :-  {{admin.name}}</h4>
+                <h4 class="modal-title">{{trans.update}}  :-  {{user.name}}</h4>
               </div>
               <div class="modal-body">
                    
                           <form method="patch" enctype="multipart/form-data" 
-                           v-on:submit.prevent="update_data()" id="admin">
+                           v-on:submit.prevent="update_data()" id="user">
 
                             <div class="form-group">
                             <label for="name">{{trans.name}}</label>
-                            <input type="text" name="name" id="name" class="form-control" v-model="admin.name">
+                            <input type="text" name="name" id="name" class="form-control" v-model="user.name">
                           </div>
                             <div class="form-group">
                             <label for="email">{{trans.email}}</label>
                             <input type="text" disabled="true" name="email" id="email" class="form-control" 
-                            v-model="admin.email">
+                            v-model="user.email">
                           </div>
-                         <div class="form-group" v-if="path === '/admin/admins'">
-                          <label for="role">admin.role</label>
-                          <select v-model="admin.roles.role_name" class="form-control" name="role" id="role">
-                             <option disabled value="">{{trans.please_select_one}}</option> 
-                             <option value="SuperAdmin">SuperAdmin</option>
-                             <option value="Admin">Admin</option>
-                             <option value="Follow_up">Follow_up</option>
-
-                           </select>
-                        </div>      
+          
 
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" @click="close">{{trans.close}}</button>
@@ -53,10 +44,12 @@
       props:['openModal','trans'],
       data(){
         return{
-            path:'',
+            path:window.location.pathname,
             url:'',
-            admin:{},
-            errors:{}
+            user:{},
+            errors:{},
+            roles:{},
+
             
         }
       },
@@ -67,23 +60,23 @@
     this.$emit('closemodal')
     },
 
-    update_data()
-    {
-    this.path = window.location.pathname
-    switch(this.path){
-    case '/admin/admins':
-    this.url = 'admin';
-    this.update();
-    break;
-    case '/admin/users':
-    this.url = 'user';
-    this.update();
-    break;
+    // update_data()
+    // {
+    // // this.path = window.location.pathname
+    // switch(this.path){
+    // case '/admin/admins':
+    // this.url = 'admin';
+    // this.update();
+    // break;
+    // case '/admin/users':
+    // this.url = 'user';
+    // this.update();
+    // break;
 
-    }
-    },
-    update(){
-      axios.patch(`${this.url}/${this.admin.id}/update`,this.$data.admin).then((response)=>{
+    // }
+    // },
+    update_data(){
+      axios.patch(`user/${this.user.id}/update`,this.$data.user).then((response)=>{
           console.info(response.status);
           this.close();
           nativeToast({
@@ -101,9 +94,9 @@
 
 
     },
-        mounted() {
-            this.path = window.location.pathname
 
+        mounted() {
+            
         }
     }
 </script>

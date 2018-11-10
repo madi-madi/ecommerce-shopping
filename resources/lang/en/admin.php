@@ -64,4 +64,5 @@ return [
 	'create_new_user'=>'Create new user',
 	'update'=>'Update',
 	'title'=>'Product Name',
+	'notifications'=>'Notifications'
 ];

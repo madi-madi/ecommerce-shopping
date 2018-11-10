@@ -1,7 +1,7 @@
 @extends('admin.index')
 @section('content')
 <div class="box">
-    <modal-component :trans="{{json_encode(trans('admin'))}}" :open-modal="showView" @closemodal="close" ></modal-component>
+    <update-admin :trans="{{json_encode(trans('admin'))}}" :open-modal="showView" @closemodal="close" ></update-admin>
     <modal-create-admin :trans="{{json_encode(trans('admin'))}}" :open-modal="showAdd" :admin_id ="{{admin()->user()->id}}" @closemodal="close"></modal-create-admin>
   <div class="box-header">
     <h3 class="box-title">{{ $title }}</h3>
@@ -29,13 +29,14 @@ type="button"
                 </thead>
                 <tbody>
                 	{{-- @foreach($admins as $admin) --}}
-                
-			   <tr  v-for="(admin , index) in admins.data"
+
+         <tr 
+          v-for="(admin , index) in admins.data" 
                  :class="{'alert alert-danger':admin.deleted_at !== null}"
 
           >
                   <td>@{{admin.id}}</td>
-                  <td>@{{admin.name}}</td>
+                  <td>@{{admin.name | capitalize}}</td>
                   <td>@{{admin.email}}</td>
                   <td>@{{admin.created_at}}</td>
                   <td>@{{admin.roles.role_name}}</td>
@@ -47,7 +48,7 @@ type="button"
                       class="btn btn-warning"
                       
                        @click="deleteAdmin(admin,index)"
-                       title="{{trans('admin.delete')}}"
+                       title="transadmindelete"
                          >
                         <i class="fa fa-fw fa-trash fa-lg"></i>
                        </button>
@@ -55,24 +56,24 @@ type="button"
                       class="btn btn-success"
                       @click.prevent="openShow(index)"
                       type="button" 
-                      title="{{trans('admin.edit')}}"
+                      title="transadminedit"
                       > 
                       <i class="fa fa-fw fa-edit fa-lg"></i>
                        </button>  
                          
-                         {{-- {{auth()->guard('admin')->user()}} --}}
+                        
                     </div>
                     <div v-else>
                       <button 
                       class="btn btn-primary"
                        @click="restoreAdmin(admin,index)"
-                      title="{{trans('admin.restore')}}"
+                      title="transadminrestore"
                         > 
             <i class="fa fa-fw fa-save fa-lg"></i>
                        </button>
                       <button class="btn btn-danger"
                        @click="deleteforeverAdmin(admin,index)"
-                      title="{{trans('admin.delete_for_ever')}}"
+                      title="admindelete_for_ever"
                        > 
             <i class="fa fa-fw fa-trash-o fa-lg"></i>
 
@@ -83,6 +84,7 @@ type="button"
                   </td>
 
                 </tr>
+
                 	{{-- @endforeach --}}
                
  {{--                <tr

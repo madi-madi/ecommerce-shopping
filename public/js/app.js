@@ -377,33 +377,6 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -507,6 +480,33 @@ module.exports = function normalizeComponent (
     options: options
   }
 }
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
 
 
 /***/ }),
@@ -3152,7 +3152,7 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
 /***/ }),
 /* 5 */
@@ -31162,7 +31162,7 @@ window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo___default.a({
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(14)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(14)(module)))
 
 /***/ }),
 /* 14 */
@@ -56778,7 +56778,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(38).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(38).setImmediate))
 
 /***/ }),
 /* 38 */
@@ -56848,7 +56848,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 39 */
@@ -57041,14 +57041,14 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(7)))
 
 /***/ }),
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(41)
 /* template */
@@ -57241,8 +57241,8 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(44);
-__webpack_require__(71);
-module.exports = __webpack_require__(72);
+__webpack_require__(74);
+module.exports = __webpack_require__(75);
 
 
 /***/ }),
@@ -57277,14 +57277,18 @@ window.Vue = __webpack_require__(37);
  */
 
 Vue.component('pagination-component', __webpack_require__(40));
-Vue.component('modal-component', __webpack_require__(47));
-Vue.component('modal-create', __webpack_require__(50));
-Vue.component('modal-update', __webpack_require__(53));
-Vue.component('upload-file', __webpack_require__(56));
-Vue.component('modal-create-category', __webpack_require__(59));
-Vue.component('modal-create-admin', __webpack_require__(62));
-Vue.component('modal-create-user', __webpack_require__(65));
-Vue.component('modal-create-role', __webpack_require__(68));
+Vue.component('update-admin', __webpack_require__(47));
+Vue.component('update-user', __webpack_require__(50));
+Vue.component('modal-create', __webpack_require__(53));
+Vue.component('modal-update', __webpack_require__(56));
+Vue.component('upload-file', __webpack_require__(59));
+Vue.component('modal-create-category', __webpack_require__(62));
+Vue.component('modal-create-admin', __webpack_require__(65));
+Vue.component('modal-create-user', __webpack_require__(68));
+Vue.component('modal-create-role', __webpack_require__(71));
+// Vue.component('users-component', require('./components/Users.vue'));
+// Vue.component('admin-component', require('./components/Users.vue'));
+
 
 var app = new Vue({
     el: '#app',
@@ -57309,6 +57313,13 @@ var app = new Vue({
                 current_page: 1
             },
             admins: {
+                total: 0,
+                per_page: 2,
+                from: 1,
+                to: 0,
+                current_page: 1
+            },
+            notifications: {
                 total: 0,
                 per_page: 2,
                 from: 1,
@@ -57372,6 +57383,10 @@ var app = new Vue({
         if (window.location.pathname === '/admin/roles') {
             this.getRoles();
         }
+
+        if (window.location.pathname === '/admin/notifications') {
+            this.getNotifications();
+        }
     },
     mounted: function mounted() {
         if (window.location.pathname === '/admin/users') {
@@ -57391,13 +57406,29 @@ var app = new Vue({
     },
 
     methods: {
+        statusnativeToast: function statusnativeToast() {
+            var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "Done";
+            var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+            var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "success";
+            var timeout = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 5000;
+            var position = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "north-east";
+
+            __WEBPACK_IMPORTED_MODULE_0_native_toast___default()({
+                message: message + ' ' + name,
+                position: position,
+                // Self destroy in 5 seconds
+                timeout: timeout,
+                type: type
+            });
+        },
         getUsers: function getUsers() {
             var _this2 = this;
 
             axios.get('/admin/users?page=' + this.users.current_page).then(function (response) {
                 _this2.users = response.data;
-            }).catch(function () {
-                console.log('handle server error from here');
+            }).catch(function (error) {
+                // console.log('handle server error from here');
+                _this2.statusnativeToast("Access denied", error.type, "warning", 5000, "north-east");
             });
         },
         deleteUser: function deleteUser(user, index) {
@@ -57405,14 +57436,9 @@ var app = new Vue({
 
             axios.delete('user/' + user.id + '/delete').then(function (response) {
                 _this3.users.data[index].deleted_at = response.data.deleted_at;
+                _this3.statusnativeToast("Success Deleted : ", user.name, "success", 5000, "north-east");
             }).catch(function (error) {
-                __WEBPACK_IMPORTED_MODULE_0_native_toast___default()({
-                    message: 'Access denied',
-                    // position: 'north-east',
-                    // Self destroy in 5 seconds
-                    timeout: 4000,
-                    type: 'warning'
-                });
+                _this3.statusnativeToast("Access denied", error.type, "warning", 5000, "north-east");
             });
         },
         restoreUser: function restoreUser(user, index) {
@@ -57420,6 +57446,7 @@ var app = new Vue({
 
             axios.post('user/' + user.id + '/restore').then(function (response) {
                 _this4.users.data[index].deleted_at = response.data.deleted_at;
+                _this4.statusnativeToast("Success Restored : ", user.name, "success", 5000, "north-east");
             }).catch(function (error) {
                 console.error(error.type);
             });
@@ -57429,47 +57456,14 @@ var app = new Vue({
 
             axios.delete('user/' + user.id + '/deleteforever').then(function (response) {
                 _this5.users.data.splice(index, 1);
+                _this5.statusnativeToast("Success Deleted Ever : ", user.name, "success", 5000, "north-east");
             }).catch(function (error) {
                 console.error(error.type);
-            });
-        },
-
-        // admin 
-        deleteAdmin: function deleteAdmin(admin, index) {
-            var _this6 = this;
-
-            axios.delete('admin/' + admin.id + '/delete').then(function (response) {
-                console.log(_this6.admins.data[index].deleted_at = response.data.deleted_at);
-            }).catch(function (error) {
-                __WEBPACK_IMPORTED_MODULE_0_native_toast___default()({
-                    message: 'Access denied',
-                    // position: 'north-east',
-                    // Self destroy in 5 seconds
-                    timeout: 4000,
-                    type: 'warning'
-                });
-            });
-        },
-        restoreAdmin: function restoreAdmin(admin, index) {
-            var _this7 = this;
-
-            axios.post('admin/' + admin.id + '/restore').then(function (response) {
-                console.log(_this7.admins.data[index].deleted_at = response.data.deleted_at);
-            }).catch(function (error) {
-                console.error(error.type);
-            });
-        },
-        deleteforeverAdmin: function deleteforeverAdmin(admin, index) {
-            var _this8 = this;
-
-            axios.delete('admin/' + admin.id + '/deleteforever').then(function (response) {
-                _this8.admins.data.splice(index, 1);
-            }).catch(function (error) {
-                console.error(error.type);
+                _this5.statusnativeToast("Access denied", error.type, "warning", 5000, "north-east");
             });
         },
         updateSettings: function updateSettings() {
-            var _this9 = this;
+            var _this6 = this;
 
             var formData = new FormData(document.getElementById('settings'));
             axios.post('settings', formData, {
@@ -57479,28 +57473,55 @@ var app = new Vue({
                 }
             }).then(function (response) {
                 // console.info('Seting '+ JSON.stringify(response.data));
-                _this9.settings = response.data;
-                _this9.$refs.logo.value = null;
-                _this9.$refs.icon.value = null;
-                __WEBPACK_IMPORTED_MODULE_0_native_toast___default()({
-                    message: 'Updated Success',
-                    position: 'north-east',
-                    // Self destroy in 5 seconds
-                    timeout: 5000,
-                    type: 'success'
-                });
+                _this6.settings = response.data;
+                _this6.$refs.logo.value = null;
+                _this6.$refs.icon.value = null;
+                _this6.statusnativeToast("Success Updated Settings", '', "success", 5000, "north-east");
             }).catch(function (error) {});
-
-            console.info('Test function colective');
+            this.statusnativeToast("Access denied ", error.type, "warning", 5000, "north-east");
         },
         getAdmins: function getAdmins() {
-            var _this10 = this;
+            var _this7 = this;
 
             // axios.get(`/admin/users?page=${this.users.current_page}`)
 
             axios.get('/admin/admins?page=' + this.admins.current_page).then(function (response) {
-                _this10.admins = response.data;
+                _this7.admins = response.data;
             }).catch(function (error) {});
+        },
+
+        // admin 
+        deleteAdmin: function deleteAdmin(admin, index) {
+            var _this8 = this;
+
+            axios.delete('admin/' + admin.id + '/delete').then(function (response) {
+                _this8.admins.data[index].deleted_at = response.data.deleted_at;
+                _this8.statusnativeToast("Success Deleted : ", admin.name, "success", 5000, "north-east");
+            }).catch(function (error) {
+                _this8.statusnativeToast("Access denied", error.type, "warning", 5000, "north-east");
+            });
+        },
+        restoreAdmin: function restoreAdmin(admin, index) {
+            var _this9 = this;
+
+            axios.post('admin/' + admin.id + '/restore').then(function (response) {
+                _this9.admins.data[index].deleted_at = response.data.deleted_at;
+                _this9.statusnativeToast("Success Restored : ", admin.name, "success", 5000, "north-east");
+            }).catch(function (error) {
+                console.error(error.type);
+                _this9.statusnativeToast("Access denied ", error.type, "warning", 5000, "north-east");
+            });
+        },
+        deleteforeverAdmin: function deleteforeverAdmin(admin, index) {
+            var _this10 = this;
+
+            axios.delete('admin/' + admin.id + '/deleteforever').then(function (response) {
+                _this10.admins.data.splice(index, 1);
+                _this10.statusnativeToast("Success Deleted For Ever : ", admin.name, "success", 5000, "north-east");
+            }).catch(function (error) {
+                console.error(error.type);
+                _this10.statusnativeToast("Access denied ", error.type, "warning", 5000, "north-east");
+            });
         },
         getSettings: function getSettings() {
             var _this11 = this;
@@ -57518,6 +57539,16 @@ var app = new Vue({
                 _this12.notification = response.data;
             }).catch(function (error) {});
         },
+        getNotifications: function getNotifications() {
+            var _this13 = this;
+
+            // axios.get(`/admin/users?page=${this.users.current_page}`)
+
+            axios.get('/admin/notifications?page=' + this.notifications.current_page).then(function (response) {
+                console.log(response.data);
+                _this13.notifications = response.data;
+            }).catch(function (error) {});
+        },
         openCreate: function openCreate() {
             app.showAdd = true;
         },
@@ -57526,19 +57557,20 @@ var app = new Vue({
             if (path_request === '/admin/admins') {
                 this.$children[0].admin = this.admins.data[index]; // children props
             } else if (path_request === '/admin/users') {
-                this.$children[0].admin = this.users.data[index]; // children props
+                this.$children[0].user = this.users.data[index]; // children props
             } else if (path_request === '/admin/products' || path_request === '/admin/category/' + this.activeCategory) {
                 this.$children[1].product = this.products.data[index]; // children props
             }
             app.showView = true;
         },
         getProducts: function getProducts() {
-            var _this13 = this;
+            var _this14 = this;
 
             axios.get('/admin/products?page=' + this.products.current_page).then(function (response) {
-                _this13.products = response.data;
+                _this14.products = response.data;
             }).catch(function (error) {
-                console.log('handle server error from here');
+                // console.log('handle server error from here');
+                _this14.statusnativeToast("Access denied", error.type, "warning", 5000, "north-east");
             });
         },
         getProductsByCategory: function getProductsByCategory(category) {
@@ -57551,23 +57583,27 @@ var app = new Vue({
             // });                
         },
         getProductCat: function getProductCat() {
-            var _this14 = this;
+            var _this15 = this;
 
             axios.get('/admin/category/' + this.activeCategory + '?page=' + this.productsCat.current_page).then(function (response) {
                 console.log(response.data);
-                _this14.productsCat = response.data;
+                _this15.productsCat = response.data;
             }).catch(function (error) {
-                console.log('handle server error from here');
+                // console.log('handle server error from here');
+                _this15.statusnativeToast("Access denied", error.type, "warning", 5000, "north-east");
             });
         },
         deleteImage: function deleteImage(photo, index, ind) {
-            var _this15 = this;
+            var _this16 = this;
 
-            console.log(this.products.data[ind]);
+            // console.log(this.products.data[ind])
 
             axios.delete('http://127.0.0.1:8000/admin/image/' + photo.id + '/delete').then(function (response) {
-                _this15.products.data[ind].images.splice(index, 1);
-            }).catch(function (error) {});
+                _this16.products.data[ind].images.splice(index, 1);
+                _this16.statusnativeToast("Success Deleted file from : ", products.data[ind].title, "success", 5000, "north-east");
+            }).catch(function (error) {
+                _this16.statusnativeToast("Access denied ", error.type, "warning", 5000, "north-east");
+            });
         },
         close: function close() {
             this.showView = false;
@@ -57576,71 +57612,80 @@ var app = new Vue({
 
         // product 
         deleteProduct: function deleteProduct(product, index) {
-            var _this16 = this;
+            var _this17 = this;
 
             console.log(product);
             axios.delete('http://127.0.0.1:8000/admin/product/' + product.id + '/delete').then(function (response) {
-                if (window.location.pathname === '/admin/category/' + _this16.activeCategory) {
-                    console.log(_this16.productsCat.data[index].deleted_at = response.data.deleted_at);
+                if (window.location.pathname === '/admin/category/' + _this17.activeCategory) {
+                    _this17.productsCat.data[index].deleted_at = response.data.deleted_at;
+                    _this17.statusnativeToast("Success Deleted Product : ", product.title, "success", 5000, "north-east");
                 } else {
-                    console.log(_this16.products.data[index].deleted_at = response.data.deleted_at);
+                    console.log(_this17.products.data[index].deleted_at = response.data.deleted_at);
+                    _this17.statusnativeToast("Success Deleted Product : ", product.title, "success", 5000, "north-east");
                 }
             }).catch(function (error) {
-                __WEBPACK_IMPORTED_MODULE_0_native_toast___default()({
-                    message: 'Access denied',
-                    // position: 'north-east',
-                    // Self destroy in 5 seconds
-                    timeout: 4000,
-                    type: 'warning'
-                });
+                _this17.statusnativeToast("Access denied ", error.type, "warning", 5000, "north-east");
             });
         },
         restoreProduct: function restoreProduct(product, index) {
-            var _this17 = this;
+            var _this18 = this;
 
             axios.post('http://127.0.0.1:8000/admin/product/' + product.id + '/restore').then(function (response) {
-                if (window.location.pathname === '/admin/category/' + _this17.activeCategory) {
-                    console.log(_this17.productsCat.data[index].deleted_at = response.data.deleted_at);
+                if (window.location.pathname === '/admin/category/' + _this18.activeCategory) {
+                    console.log(_this18.productsCat.data[index].deleted_at = response.data.deleted_at);
+                    _this18.statusnativeToast("Success Restored Product : ", product.title, "success", 5000, "north-east");
                 } else {
-                    console.log(_this17.products.data[index].deleted_at = response.data.deleted_at);
+                    console.log(_this18.products.data[index].deleted_at = response.data.deleted_at);
+                    _this18.statusnativeToast("Success Restored Product : ", product.title, "success", 5000, "north-east");
                 }
             }).catch(function (error) {
                 console.error(error.type);
+                _this18.statusnativeToast("Access denied ", error.type, "warning", 5000, "north-east");
             });
         },
         deleteforeverProduct: function deleteforeverProduct(product, index) {
-            var _this18 = this;
+            var _this19 = this;
 
             axios.delete('http://127.0.0.1:8000/admin/product/' + product.id + '/deleteforever').then(function (response) {
                 console.info(response);
-                if (window.location.pathname === '/admin/category/' + _this18.activeCategory) {
-                    _this18.productsCat.data.splice(index, 1);
+                if (window.location.pathname === '/admin/category/' + _this19.activeCategory) {
+                    _this19.productsCat.data.splice(index, 1);
+                    _this19.statusnativeToast("Success Deleted Ever Product : ", product.title, "success", 5000, "north-east");
                 } else {
-                    _this18.products.data.splice(index, 1);
+                    _this19.products.data.splice(index, 1);
+                    _this19.statusnativeToast("Success Deleted Ever Product : ", product.title, "success", 5000, "north-east");
                 }
             }).catch(function (error) {
                 console.error(error.type);
+                _this19.statusnativeToast("Access denied ", error.type, "warning", 5000, "north-east");
             });
         },
         getCategories: function getCategories() {
-            var _this19 = this;
+            var _this20 = this;
 
             axios.get('categories/all').then(function (response) {
                 console.info(response);
-                _this19.categories = response.data;
+                _this20.categories = response.data;
             }).catch(function (error) {});
         },
 
 
         // admin roles
         getRoles: function getRoles() {
-            var _this20 = this;
+            var _this21 = this;
 
             axios.get('/admin/roles?page=' + this.roles.current_page).then(function (response) {
-                _this20.roles = response.data;
+                _this21.roles = response.data;
             }).catch(function () {
                 console.log('handle server error from here');
             });
+        }
+    },
+    filters: {
+        capitalize: function capitalize(value) {
+            if (!value) return '';
+            value = value.toString();
+            return value.charAt(0).toUpperCase() + value.slice(1);
         }
     }
 });
@@ -57802,7 +57847,7 @@ module.exports = index;
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(48)
 /* template */
@@ -57823,7 +57868,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/components/ModalComponent.vue"
+Component.options.__file = "resources/assets/js/components/ModalUpdateAdmin.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -57832,9 +57877,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-465fd2c7", Component.options)
+    hotAPI.createRecord("data-v-33735660", Component.options)
   } else {
-    hotAPI.reload("data-v-465fd2c7", Component.options)
+    hotAPI.reload("data-v-33735660", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -57905,10 +57950,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['openModal', 'trans'],
     data: function data() {
         return {
-            path: '',
+            path: window.location.pathname,
             url: '',
             admin: {},
-            errors: {}
+            errors: {},
+            roles: {}
 
         };
     },
@@ -57918,24 +57964,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         close: function close() {
             this.$emit('closemodal');
         },
-        update_data: function update_data() {
-            this.path = window.location.pathname;
-            switch (this.path) {
-                case '/admin/admins':
-                    this.url = 'admin';
-                    this.update();
-                    break;
-                case '/admin/users':
-                    this.url = 'user';
-                    this.update();
-                    break;
 
-            }
-        },
-        update: function update() {
+
+        // update_data()
+        // {
+        // // this.path = window.location.pathname
+        // switch(this.path){
+        // case '/admin/admins':
+        // this.url = 'admin';
+        // this.update();
+        // break;
+        // case '/admin/users':
+        // this.url = 'user';
+        // this.update();
+        // break;
+
+        // }
+        // },
+        update_data: function update_data() {
             var _this = this;
 
-            axios.patch(this.url + '/' + this.admin.id + '/update', this.$data.admin).then(function (response) {
+            axios.patch('admin/' + this.admin.id + '/update', this.$data.admin).then(function (response) {
                 console.info(response.status);
                 _this.close();
                 nativeToast({
@@ -57948,10 +57997,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (error) {
                 _this.errors = error.response.data.errors;
             });
+        },
+        getRoles: function getRoles() {
+            var _this2 = this;
+
+            axios.get('roles/' + this.id + '/admin').then(function (response) {
+                console.log(response.data);
+                _this2.roles = response.data;
+            }).catch(function (error) {
+                _this2.errors = error.response.data.errors;
+            });
         }
     },
+
     mounted: function mounted() {
-        this.path = window.location.pathname;
+
+        this.getRoles();
     }
 });
 
@@ -58078,7 +58139,7 @@ var render = function() {
                     _vm.path === "/admin/admins"
                       ? _c("div", { staticClass: "form-group" }, [
                           _c("label", { attrs: { for: "role" } }, [
-                            _vm._v("admin.role")
+                            _vm._v("admin.roles")
                           ]),
                           _vm._v(" "),
                           _c(
@@ -58122,18 +58183,20 @@ var render = function() {
                                 [_vm._v(_vm._s(_vm.trans.please_select_one))]
                               ),
                               _vm._v(" "),
-                              _c("option", { attrs: { value: "SuperAdmin" } }, [
-                                _vm._v("SuperAdmin")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "Admin" } }, [
-                                _vm._v("Admin")
-                              ]),
-                              _vm._v(" "),
-                              _c("option", { attrs: { value: "Follow_up" } }, [
-                                _vm._v("Follow_up")
-                              ])
-                            ]
+                              _vm._l(_vm.roles, function(role) {
+                                return _c(
+                                  "option",
+                                  { domProps: { value: role.role_name } },
+                                  [
+                                    _vm._v(
+                                      "\n                             " +
+                                        _vm._s(role.role_name)
+                                    )
+                                  ]
+                                )
+                              })
+                            ],
+                            2
                           )
                         ])
                       : _vm._e(),
@@ -58173,7 +58236,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-465fd2c7", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-33735660", module.exports)
   }
 }
 
@@ -58182,11 +58245,322 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(51)
 /* template */
 var __vue_template__ = __webpack_require__(52)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/ModalUpdateUser.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5a88f15a", Component.options)
+  } else {
+    hotAPI.reload("data-v-5a88f15a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['openModal', 'trans'],
+    data: function data() {
+        return {
+            path: window.location.pathname,
+            url: '',
+            user: {},
+            errors: {},
+            roles: {}
+
+        };
+    },
+
+
+    methods: {
+        close: function close() {
+            this.$emit('closemodal');
+        },
+
+
+        // update_data()
+        // {
+        // // this.path = window.location.pathname
+        // switch(this.path){
+        // case '/admin/admins':
+        // this.url = 'admin';
+        // this.update();
+        // break;
+        // case '/admin/users':
+        // this.url = 'user';
+        // this.update();
+        // break;
+
+        // }
+        // },
+        update_data: function update_data() {
+            var _this = this;
+
+            axios.patch('user/' + this.user.id + '/update', this.$data.user).then(function (response) {
+                console.info(response.status);
+                _this.close();
+                nativeToast({
+                    message: 'Updated Success',
+                    position: 'north-east',
+                    // Self destroy in 5 seconds
+                    timeout: 5000,
+                    type: 'success'
+                });
+            }).catch(function (error) {
+                _this.errors = error.response.data.errors;
+            });
+        }
+    },
+
+    mounted: function mounted() {}
+});
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.openModal
+    ? _c(
+        "div",
+        {
+          staticClass: "modal fade in",
+          staticStyle: { display: "block" },
+          attrs: { id: "modal-default" }
+        },
+        [
+          _c("div", { staticClass: "modal-dialog" }, [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "button",
+                  { staticClass: "close", attrs: { type: "button" } },
+                  [
+                    _c(
+                      "span",
+                      {
+                        attrs: { "aria-hidden": "true" },
+                        on: { click: _vm.close }
+                      },
+                      [_vm._v("×")]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("h4", { staticClass: "modal-title" }, [
+                  _vm._v(
+                    _vm._s(_vm.trans.update) + "  :-  " + _vm._s(_vm.user.name)
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "form",
+                  {
+                    attrs: {
+                      method: "patch",
+                      enctype: "multipart/form-data",
+                      id: "user"
+                    },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        _vm.update_data()
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "name" } }, [
+                        _vm._v(_vm._s(_vm.trans.name))
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.user.name,
+                            expression: "user.name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", name: "name", id: "name" },
+                        domProps: { value: _vm.user.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.user, "name", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "email" } }, [
+                        _vm._v(_vm._s(_vm.trans.email))
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.user.email,
+                            expression: "user.email"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          disabled: "true",
+                          name: "email",
+                          id: "email"
+                        },
+                        domProps: { value: _vm.user.email },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.user, "email", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-footer" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default pull-left",
+                          attrs: { type: "button" },
+                          on: { click: _vm.close }
+                        },
+                        [_vm._v(_vm._s(_vm.trans.close))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "submit" }
+                        },
+                        [_vm._v(_vm._s(_vm.trans.update))]
+                      )
+                    ])
+                  ]
+                )
+              ])
+            ])
+          ])
+        ]
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5a88f15a", module.exports)
+  }
+}
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(54)
+/* template */
+var __vue_template__ = __webpack_require__(55)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -58225,7 +58599,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 51 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58460,7 +58834,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 52 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -58966,15 +59340,15 @@ if (false) {
 }
 
 /***/ }),
-/* 53 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(54)
+var __vue_script__ = __webpack_require__(57)
 /* template */
-var __vue_template__ = __webpack_require__(55)
+var __vue_template__ = __webpack_require__(58)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -59013,7 +59387,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 54 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -59194,7 +59568,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 55 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -59558,7 +59932,7 @@ var render = function() {
                           staticClass: "btn btn-primary",
                           attrs: { type: "submit" }
                         },
-                        [_vm._v(_vm._s(_vm.trans.add))]
+                        [_vm._v(_vm._s(_vm.trans.update))]
                       )
                     ])
                   ]
@@ -59581,15 +59955,15 @@ if (false) {
 }
 
 /***/ }),
-/* 56 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(57)
+var __vue_script__ = __webpack_require__(60)
 /* template */
-var __vue_template__ = __webpack_require__(58)
+var __vue_template__ = __webpack_require__(61)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -59628,7 +60002,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -59727,7 +60101,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -59768,15 +60142,15 @@ if (false) {
 }
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(60)
+var __vue_script__ = __webpack_require__(63)
 /* template */
-var __vue_template__ = __webpack_require__(61)
+var __vue_template__ = __webpack_require__(64)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -59815,7 +60189,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -59921,7 +60295,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -60104,15 +60478,15 @@ if (false) {
 }
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(63)
+var __vue_script__ = __webpack_require__(66)
 /* template */
-var __vue_template__ = __webpack_require__(64)
+var __vue_template__ = __webpack_require__(67)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -60151,7 +60525,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 63 */
+/* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60270,7 +60644,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 64 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -60540,15 +60914,15 @@ if (false) {
 }
 
 /***/ }),
-/* 65 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(66)
+var __vue_script__ = __webpack_require__(69)
 /* template */
-var __vue_template__ = __webpack_require__(67)
+var __vue_template__ = __webpack_require__(70)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -60587,7 +60961,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 66 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60683,7 +61057,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -60887,15 +61261,15 @@ if (false) {
 }
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(69)
+var __vue_script__ = __webpack_require__(72)
 /* template */
-var __vue_template__ = __webpack_require__(70)
+var __vue_template__ = __webpack_require__(73)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -60934,11 +61308,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 69 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -60994,6 +61374,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
+    statusnativeToast: function statusnativeToast() {
+      var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "Done";
+      var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "success";
+      var timeout = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 5000;
+      var position = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "north-east";
+
+      nativeToast({
+        message: message + ' ' + name,
+        position: position,
+        // Self destroy in 5 seconds
+        timeout: timeout,
+        type: type
+      });
+    },
     close: function close() {
 
       this.$emit('closemodal');
@@ -61002,19 +61397,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this = this;
 
       axios.post('http://127.0.0.1:8000/admin/role/create', this.new_role).then(function (response) {
+        console.log(response.data);
         _this.$parent.roles.data.unshift(response.data);
         _this.close();
+        _this.statusnativeToast("Success Add new Role", _this.new_role.role_name, "success", 5000, "north-east");
+
         _this.new_role = {};
-        // nativeToast({
-        // message: 'Updated Success',
-        // position: 'north-east',
-        // // Self destroy in 5 seconds
-        // timeout: 5000,
-        // type: 'success'
-        // })
       }).catch(function (error) {
         _this.errors = error.response.data.errors;
-        _this.data = '';
+        // this.data = '';
       });
     }
   }
@@ -61022,7 +61413,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 70 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -61164,13 +61555,13 @@ if (false) {
 }
 
 /***/ }),
-/* 71 */
+/* 74 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -63,7 +63,7 @@
 
               <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" @click="close">{{trans.close}}</button>
-                <button type="submit" class="btn btn-primary">{{trans.add}}</button>
+                <button type="submit" class="btn btn-primary">{{trans.update}}</button>
               </div>
               </form>
 

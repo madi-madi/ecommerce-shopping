@@ -22,7 +22,8 @@ window.Vue = require('vue');
  */
 
 Vue.component('pagination-component', require('./components/PaginationComponent.vue'));
-Vue.component('modal-component', require('./components/ModalComponent.vue'));
+Vue.component('update-admin', require('./components/ModalUpdateAdmin.vue'));
+Vue.component('update-user', require('./components/ModalUpdateUser.vue'));
 Vue.component('modal-create', require('./components/ModalCreate.vue'));
 Vue.component('modal-update', require('./components/ModalUpdate.vue'));
 Vue.component('upload-file', require('./components/UploadFile.vue'));
@@ -30,6 +31,10 @@ Vue.component('modal-create-category', require('./components/ModalCreateCategory
 Vue.component('modal-create-admin', require('./components/ModalCreateAdmin.vue'));
 Vue.component('modal-create-user', require('./components/ModalCreateUser.vue'));
 Vue.component('modal-create-role', require('./components/ModalCreateRole.vue'));
+// Vue.component('users-component', require('./components/Users.vue'));
+// Vue.component('admin-component', require('./components/Users.vue'));
+
+
 
 
 
@@ -63,6 +68,13 @@ const app = new Vue({
             current_page: 1
         },
         admins: {
+            total: 0,
+            per_page: 2,
+            from: 1,
+            to: 0,
+            current_page: 1
+        },
+        notifications: {
             total: 0,
             per_page: 2,
             from: 1,
@@ -128,6 +140,10 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         this.getRoles();
     }
 
+   if (window.location.pathname === '/admin/notifications') {
+        this.getNotifications();
+    }    
+
 
     },
     mounted(){
@@ -150,34 +166,43 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
 
     },
     methods:{
+      statusnativeToast(message="Done", name=null, type="success",timeout=5000 ,position="north-east"){
+      nativeToast({
+      message: message + ' ' + name  ,
+      position:position,
+      // Self destroy in 5 seconds
+      timeout: timeout,
+      type: type,
+      })
+      },
         getUsers() {
             axios.get(`/admin/users?page=${this.users.current_page}`)
             .then((response) => {
             this.users = response.data;
             })
-            .catch(() => {
-            console.log('handle server error from here');
+            .catch((error) => {
+            // console.log('handle server error from here');
+      this.statusnativeToast("Access denied",error.type,"warning",5000 ,"north-east")
+
             });
         },
         deleteUser(user ,index){
             axios.delete(`user/${user.id}/delete`).then((response)=>{
             this.users.data[index].deleted_at = response.data.deleted_at
+      this.statusnativeToast("Success Deleted : ",user.name,"success",5000 ,"north-east")
 
             })
             .catch((error)=>{
-            nativeToast({
-            message: 'Access denied',
-            // position: 'north-east',
-            // Self destroy in 5 seconds
-            timeout: 4000,
-            type: 'warning'
-            })
+      this.statusnativeToast("Access denied",error.type,"warning",5000 ,"north-east")
+
 
             }) 
         },
+
         restoreUser(user ,index){
            axios.post(`user/${user.id}/restore`).then((response)=>{
             this.users.data[index].deleted_at = response.data.deleted_at
+      this.statusnativeToast("Success Restored : ",user.name,"success",5000 ,"north-east")
 
            })
            .catch((error)=>{
@@ -187,44 +212,17 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         deleteforeverUser(user ,index){
            axios.delete(`user/${user.id}/deleteforever`).then((response)=>{
             this.users.data.splice(index , 1)
+      this.statusnativeToast("Success Deleted Ever : ",user.name,"success",5000 ,"north-east")
 
            })
            .catch((error)=>{
             console.error(error.type);
-           }) 
-        },
-        // admin 
-        deleteAdmin(admin ,index){
-            axios.delete(`admin/${admin.id}/delete`).then((response)=>{
-            console.log(this.admins.data[index].deleted_at = response.data.deleted_at)
-            })
-            .catch((error)=>{
-            nativeToast({
-            message: 'Access denied',
-            // position: 'north-east',
-            // Self destroy in 5 seconds
-            timeout: 4000,
-            type: 'warning'
-            })
+      this.statusnativeToast("Access denied",error.type,"warning",5000 ,"north-east")
 
-            }) 
-        },
-        restoreAdmin(admin ,index){
-           axios.post(`admin/${admin.id}/restore`).then((response)=>{
-            console.log(this.admins.data[index].deleted_at = response.data.deleted_at)
-           })
-           .catch((error)=>{
-            console.error(error.type);
-           }) 
-        }, 
-        deleteforeverAdmin(admin ,index){
-           axios.delete(`admin/${admin.id}/deleteforever`).then((response)=>{
-           this.admins.data.splice(index,1)
-           })
-           .catch((error)=>{
-            console.error(error.type);
            }) 
         },
+
+
         updateSettings(){
             let formData = new FormData(document.getElementById('settings'));
             axios.post(`settings`,formData,{
@@ -237,19 +235,12 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             this.settings = response.data
             this.$refs.logo.value = null;
             this.$refs.icon.value = null;
-            nativeToast({
-            message: 'Updated Success',
-            position: 'north-east',
-            // Self destroy in 5 seconds
-            timeout: 5000,
-            type: 'success'
-            })
-
+      this.statusnativeToast("Success Updated Settings",'',"success",5000 ,"north-east")
 
             })
             .catch((error)=>{})
+      this.statusnativeToast("Access denied ",error.type,"warning",5000 ,"north-east")
 
-            console.info('Test function colective');
         },
         getAdmins(){
             // axios.get(`/admin/users?page=${this.users.current_page}`)
@@ -258,6 +249,42 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             this.admins = response.data;
 
             }).catch((error)=>{})
+        },
+        // admin 
+        deleteAdmin(admin ,index){
+            axios.delete(`admin/${admin.id}/delete`).then((response)=>{
+            this.admins.data[index].deleted_at = response.data.deleted_at
+      this.statusnativeToast("Success Deleted : ",admin.name,"success",5000 ,"north-east")
+
+            })
+            .catch((error)=>{
+      this.statusnativeToast("Access denied",error.type,"warning",5000 ,"north-east")
+    
+            }) 
+        },
+        restoreAdmin(admin ,index){
+           axios.post(`admin/${admin.id}/restore`).then((response)=>{
+           this.admins.data[index].deleted_at = response.data.deleted_at
+      this.statusnativeToast("Success Restored : ",admin.name,"success",5000 ,"north-east")
+
+           })
+           .catch((error)=>{
+            console.error(error.type);
+      this.statusnativeToast("Access denied ",error.type,"warning",5000 ,"north-east")
+
+           }) 
+        }, 
+        deleteforeverAdmin(admin ,index){
+           axios.delete(`admin/${admin.id}/deleteforever`).then((response)=>{
+           this.admins.data.splice(index,1)
+      this.statusnativeToast("Success Deleted For Ever : ",admin.name,"success",5000 ,"north-east")
+
+           })
+           .catch((error)=>{
+            console.error(error.type);
+      this.statusnativeToast("Access denied ",error.type,"warning",5000 ,"north-east")
+
+           }) 
         },
         getSettings(){
             axios.get(`settings`).then((response)=>{
@@ -274,6 +301,15 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
 
             }).catch((error)=>{})
         },
+                getNotifications(){
+            // axios.get(`/admin/users?page=${this.users.current_page}`)
+
+            axios.get(`/admin/notifications?page=${this.notifications.current_page}`).then((response)=>{
+            console.log(response.data);
+            this.notifications = response.data;
+
+            }).catch((error)=>{})
+        },
         openCreate(){
             app.showAdd = true;
         },
@@ -284,7 +320,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             this.$children[0].admin= this.admins.data[index] // children props
 
             }else if (path_request === '/admin/users') {
-            this.$children[0].admin= this.users.data[index] // children props
+            this.$children[0].user= this.users.data[index] // children props
 
             }else if (path_request === '/admin/products' ||
              path_request === '/admin/category/'+this.activeCategory) {
@@ -301,7 +337,9 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             this.products = response.data;
             })
             .catch((error) => {
-            console.log('handle server error from here');
+            // console.log('handle server error from here');
+      this.statusnativeToast("Access denied",error.type,"warning",5000 ,"north-east")
+
             });
         },
         getProductsByCategory(category) {
@@ -320,15 +358,22 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             this.productsCat = response.data;
             })
             .catch((error) => {
-            console.log('handle server error from here');
+            // console.log('handle server error from here');
+      this.statusnativeToast("Access denied",error.type,"warning",5000 ,"north-east")
+            
             });
         },
         deleteImage(photo , index , ind){
-            console.log(this.products.data[ind])
+            // console.log(this.products.data[ind])
 
             axios.delete(`http://127.0.0.1:8000/admin/image/${photo.id}/delete`).then((response)=>{
                 this.products.data[ind].images.splice(index,1 )
-            }).catch((error)=>{})
+      this.statusnativeToast("Success Deleted file from : ",products.data[ind].title,"success",5000 ,"north-east")
+
+            }).catch((error)=>{
+      this.statusnativeToast("Access denied ",error.type,"warning",5000 ,"north-east")
+
+            })
         },
 
         close() {
@@ -341,21 +386,19 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             console.log(product);
             axios.delete(`http://127.0.0.1:8000/admin/product/${product.id}/delete`).then((response)=>{
             if (window.location.pathname === '/admin/category/'+this.activeCategory) {
-            console.log(this.productsCat.data[index].deleted_at = response.data.deleted_at)
+            this.productsCat.data[index].deleted_at = response.data.deleted_at
+      this.statusnativeToast("Success Deleted Product : ",product.title,"success",5000 ,"north-east")
+
 
             }else{
             console.log(this.products.data[index].deleted_at = response.data.deleted_at)
+      this.statusnativeToast("Success Deleted Product : ",product.title,"success",5000 ,"north-east")
 
             }
             })
             .catch((error)=>{
-            nativeToast({
-            message: 'Access denied',
-            // position: 'north-east',
-            // Self destroy in 5 seconds
-            timeout: 4000,
-            type: 'warning'
-            })
+      this.statusnativeToast("Access denied ",error.type,"warning",5000 ,"north-east")
+  
 
             }) 
         },
@@ -363,15 +406,19 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
            axios.post(`http://127.0.0.1:8000/admin/product/${product.id}/restore`).then((response)=>{
             if (window.location.pathname === '/admin/category/'+this.activeCategory) {
             console.log(this.productsCat.data[index].deleted_at = response.data.deleted_at)
+      this.statusnativeToast("Success Restored Product : ",product.title,"success",5000 ,"north-east")
 
             }else{
             console.log(this.products.data[index].deleted_at = response.data.deleted_at)
+      this.statusnativeToast("Success Restored Product : ",product.title,"success",5000 ,"north-east")
 
             }
             
            })
            .catch((error)=>{
             console.error(error.type);
+      this.statusnativeToast("Access denied ",error.type,"warning",5000 ,"north-east")
+
            }) 
         }, 
         deleteforeverProduct(product ,index){
@@ -379,15 +426,19 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             console.info(response);
             if (window.location.pathname === '/admin/category/'+this.activeCategory) {
                 this.productsCat.data.splice(index,1)
+      this.statusnativeToast("Success Deleted Ever Product : ",product.title,"success",5000 ,"north-east")
 
             }else{
                 this.products.data.splice(index,1)
+      this.statusnativeToast("Success Deleted Ever Product : ",product.title,"success",5000 ,"north-east")
 
             }
 
            })
            .catch((error)=>{
             console.error(error.type);
+      this.statusnativeToast("Access denied ",error.type,"warning",5000 ,"north-east")
+
            }) 
         },
         getCategories(){
@@ -412,5 +463,12 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
 
 
 
-    }
+    },
+            filters:{
+        capitalize: function (value){
+            if (!value) return '';
+            value = value.toString();
+         return    value.charAt(0).toUpperCase()+ value.slice(1)
+        }
+    },
 });

@@ -8,13 +8,19 @@
                 <h4 class="modal-title">{{trans.create_new_role}}</h4>
               </div>
               <div class="modal-body">
-                    
                           <form method="post" enctype="multipart/form-data" 
                            v-on:submit.prevent="create_role()" id="role">
 
                             <div class="form-group">
                             <label for="role_name">{{trans.role_name}}</label>
-                            <input type="text" title="role_name" id="role_name" name="role_name" class="form-control" v-model="new_role.role_name" >
+                            <input 
+                            type="text" 
+                            title="role_name" 
+                            id="role_name" 
+                            name="role_name" 
+                            class="form-control" 
+                            v-model="new_role.role_name" >
+
                             <figcaption v-if="errors.role_name" class="text-danger">
                             {{errors.role_name[0]}}</figcaption>
                           </div>
@@ -55,6 +61,15 @@
 
 
     methods:{
+      statusnativeToast(message="Done", name=null, type="success",timeout=5000 ,position="north-east"){
+      nativeToast({
+      message: message + ' ' + name  ,
+      position:position,
+      // Self destroy in 5 seconds
+      timeout: timeout,
+      type: type,
+      })
+      },
 
     close(){
 
@@ -64,20 +79,17 @@
     create_role()
     {
       axios.post(`http://127.0.0.1:8000/admin/role/create`,this.new_role).then((response)=>{
+        console.log(response.data);
       this.$parent.roles.data.unshift(response.data);
       this.close();
+      this.statusnativeToast("Success Add new Role", this.new_role.role_name,"success",5000 ,"north-east")
+
       this.new_role = {};
-      // nativeToast({
-      // message: 'Updated Success',
-      // position: 'north-east',
-      // // Self destroy in 5 seconds
-      // timeout: 5000,
-      // type: 'success'
-      // })
+
       })
       .catch((error)=>{
         this.errors= error.response.data.errors;
-        this.data = '';
+        // this.data = '';
       })
 
 

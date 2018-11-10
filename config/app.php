@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Jerusalem',//UTC genral
     'date_format'=>'m/d/Y',
     'date_format_js'=>'mm/dd/yy',
 

@@ -1,7 +1,7 @@
 @extends('admin.index')
 @section('content')
 <div class="box" :admin_auth="{{Request::user('admin')->id}}">
-    <modal-component :trans="{{json_encode(trans('admin'))}}" :open-modal="showView" @closemodal="close"  ></modal-component>
+    <update-user :trans="{{json_encode(trans('admin'))}}" :open-modal="showView" @closemodal="close"  ></update-user>
     <modal-create-user :trans="{{json_encode(trans('admin'))}}"  :open-modal="showAdd"  @closemodal="close"></modal-create-user>
 
 
@@ -27,21 +27,20 @@ type="button"
                   <th>Action</th>
                 </tr>
                 </thead>
-                <tbody>
-               
+                <tbody >
                 <tr
-                 v-for="(user , index) in users.data"
+                v-for="(user, index) in users.data"
                  :class="{'alert alert-danger':user.deleted_at !== null}"
                   >
                   <td>@{{user.id}}</td>
-                  <td>@{{user.name}}
+                  <td>@{{user.name | capitalize }}
                   </td>
                   <td>@{{user.email}}</td>
                   <td>@{{user.created_at}}</td>
                   <td>
                     <div v-if="user.deleted_at === null">
                       <button class="btn btn-warning" @click="deleteUser(user,index)"
-                       title="{{trans('admin.delete')}}"
+                       
                       > 
                         <i class="fa fa-fw fa-trash fa-lg"></i>
                        </button>
@@ -49,7 +48,6 @@ type="button"
                       class="btn btn-success"
                       @click.prevent="openShow(index)"
                       type="button" 
-                      title="{{trans('admin.edit')}}"
                       > 
                       <i class="fa fa-fw fa-edit fa-lg"></i>
                        </button>  
@@ -57,10 +55,9 @@ type="button"
                     <div v-else>
                       <button class="btn btn-primary" 
                       @click="restoreUser(user,index)"
-                      title="{{trans('admin.restore')}}"> 
+                       type="button" >
             <i class="fa fa-fw fa-save fa-lg"></i> </button>
                       <button class="btn btn-danger" @click="deleteforeverUser(user,index)"
-                      title="{{trans('admin.delete_for_ever')}}"
                        > 
             <i class="fa fa-fw fa-trash-o fa-lg"></i>
                        </button>
@@ -68,9 +65,8 @@ type="button"
                     </div>
                     
                   </td>
-                </tr>
-            
-                                </tbody>
+                </tr>   
+                </tbody>
                 <tfoot>
                 <tr >
                   <th>Rendering engine</th>
@@ -81,6 +77,8 @@ type="button"
                 </tr>
                 </tfoot>
               </table>
+
+            
 
               <pagination-component
               :pagination="users"

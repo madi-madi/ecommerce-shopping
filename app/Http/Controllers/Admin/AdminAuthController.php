@@ -71,7 +71,6 @@ class AdminAuthController extends Controller
       'token'=>  $token,
       'created_at'=> Carbon::now()
       ]);
-      // return new AdminResetPassword(['data'=>$admin,'token'=>$token]);
       Mail::to($admin->email)->send(new AdminResetPassword(['data'=>$admin,'token'=>$token]));
       session()->flash('success',trans('admin.the_link_reset_password_sent'));
       return back();             

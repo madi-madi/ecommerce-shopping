@@ -88,13 +88,13 @@
       {{-- Notification --}}
         <li class="treeview {{active_menu('notifications')[0]}}">
             <a href="#">
-            <i class="fa fa-hashtag"></i> <span>{{trans('admin.notifications')}}</span>
+            <i class="fa fa-bell"></i> <span>{{trans('admin.notifications')}}</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu" style="{{active_menu('notifications')[1]}}">
-            <li class="active"><a href="{{route('notifications')}}"><i class="fa fa-hashtag"></i>{{trans('admin.notifications')}}</a></li>
+            <li class="active"><a href="{{route('notifications')}}"><i class="fa fa-bell-o"></i>{{trans('admin.notifications')}}</a></li>
             {{-- <li><a href="#"><i class="fa fa-hashtag"></i> {{trans('admin.add_role')}}</a></li> --}}
           </ul>
         </li>
