@@ -15,6 +15,16 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('site_name_ar');
+            $table->string('site_name_en');
+            $table->string('logo')->nullable();
+            $table->string('icon')->nullable();
+            $table->string('site_email')->nullable();
+            $table->string('main_lang')->default('ar');
+            $table->longtext('description')->nullable();
+            $table->longtext('keywords')->nullable();
+            $table->enum('status',['open','close'])->default('open');
+            $table->longtext('message_maintenance')->nullable();
             $table->timestamps();
         });
     }
