@@ -17,6 +17,7 @@ class CreateAdminsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('email')->unique();
+            $table->integer('role_id');
             $table->string('password');
             $table->datetime('last_login_at')->nullable();
             $table->string('last_login_ip')->nullable();
