@@ -19,12 +19,9 @@
 //     return view('admin.home');
 // });
 // });
-// Route::group(['middleware'=>'maintenance'],function(){
+Route::group(['middleware'=>'maintenance'],function(){
 
-// Route::get('/', 'frontendProductController@index');
-Route::get('/', function(){
-return "Test Heroku Done";
-});
+Route::get('/', 'frontendProductController@index');
 Route::get('verifyEmailFirst','Auth\RegisterController@verifyEmailFirst')->name('verifyEmailFirst');
 Route::get('verification/{email}/{verifyToken}','Auth\RegisterController@verificationDone')->name('verification');
 
@@ -33,7 +30,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-// });
+});
 
 Route::get('maintenance',function(){
         if (settings()->status == 'open') {
