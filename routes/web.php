@@ -21,7 +21,10 @@
 // });
 // Route::group(['middleware'=>'maintenance'],function(){
 
-Route::get('/', 'frontendProductController@index');
+// Route::get('/', 'frontendProductController@index');
+Route::get('/', function(){
+return "Test Heroku Done";
+});
 Route::get('verifyEmailFirst','Auth\RegisterController@verifyEmailFirst')->name('verifyEmailFirst');
 Route::get('verification/{email}/{verifyToken}','Auth\RegisterController@verificationDone')->name('verification');
 
