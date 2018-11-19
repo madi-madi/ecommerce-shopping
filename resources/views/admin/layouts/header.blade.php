@@ -79,6 +79,9 @@
 #myfileinput {
     display: none;
 }
+
+[v-cloak] > * { display:none; }
+[v-cloak]::before { content: "loading..."; }
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
