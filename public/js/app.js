@@ -3675,7 +3675,7 @@ window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo___default.a({
   key: "a013bf864afb2e409380",
   cluster: "ap2",
   encrypted: true,
-  authEndpoint: 'http://127.0.0.1:8000/broadcasting/auth'
+  authEndpoint: 'http://ecommerce-f.herokuapp.com/broadcasting/auth'
 });
 
 /***/ }),
