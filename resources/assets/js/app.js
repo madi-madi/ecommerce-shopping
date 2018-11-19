@@ -225,7 +225,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
 
         updateSettings(){
             let formData = new FormData(document.getElementById('settings'));
-            axios.post(` http://ecommerce-f.herokuapp.com/admin/settings`,formData,{
+            axios.post(`http://ecommerce-f.herokuapp.com/admin/settings`,formData,{
             headers:{
             'Content-Type': 'multipart/form-data'
 
