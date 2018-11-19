@@ -73,7 +73,7 @@
     create_user()
     {
       console.log('yes');
-      axios.post(`create/user`,this.$data.user).then((response)=>{
+      axios.post(`http://ecommerce-f.herokuapp.com/admin/create/user`,this.$data.user).then((response)=>{
         this.$parent.users.data.unshift(response.data);
         this.close();
         this.user = {};

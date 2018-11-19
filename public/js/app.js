@@ -57984,7 +57984,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     update_data: function update_data() {
       var _this = this;
 
-      axios.patch('admin/' + this.admin.id + '/update', this.$data.admin).then(function (response) {
+      axios.patch('http://ecommerce-f.herokuapp.com/admin/' + this.admin.id + '/update', this.$data.admin).then(function (response) {
         console.info(response.status);
         _this.close();
         nativeToast({
@@ -58741,7 +58741,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   created: function created() {
     var _this = this;
 
-    axios.get('http://127.0.0.1:8000/admin/categories').then(function (response) {
+    axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then(function (response) {
       console.info(response);
       _this.categories = response.data;
     }).catch(function (error) {
@@ -58788,7 +58788,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // formData.append('category_id', this.product.category_id)
 
 
-      axios.post('http://127.0.0.1:8000/admin/products/create', formData, {
+      axios.post('http://ecommerce-f.herokuapp.com/admin/products/create', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
 
@@ -59488,7 +59488,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     created: function created() {
         var _this = this;
 
-        axios.get('http://127.0.0.1:8000/admin/categories').then(function (response) {
+        axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then(function (response) {
             console.info(response);
             _this.categories = response.data;
         }).catch(function (error) {});
@@ -59513,7 +59513,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             console.log('yes');
             var formData = new FormData(document.getElementById('products'));
-            axios.patch('http://127.0.0.1:8000/admin/product/' + this.product.id + '/update', this.$data.product).then(function (response) {
+            axios.patch('http://ecommerce-f.herokuapp.com/admin/product/' + this.product.id + '/update', this.$data.product).then(function (response) {
                 // console.info('Seting '+ JSON.stringify(response.data));
                 // this.settings = response.data
 
@@ -60073,7 +60073,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             formData.append('product_id', this.product.prduct_id);
 
-            axios.post('http://127.0.0.1:8000/admin/upload/file/product', formData, {
+            axios.post('http://ecommerce-f.herokuapp.com/admin/upload/file/product', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
 
@@ -60256,7 +60256,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     this.path = window.location.pathname;
 
     if (this.pathname === '/admin/categories') {
-      axios.get('http://127.0.0.1:8000/admin/categories').then(function (response) {
+      axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then(function (response) {
         console.info(response);
         _this.categories = response.data;
       }).catch(function (error) {
@@ -60275,7 +60275,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     create_category: function create_category() {
       var _this2 = this;
 
-      axios.post('http://127.0.0.1:8000/admin/category/create', this.new_category).then(function (response) {
+      axios.post('http://ecommerce-f.herokuapp.com/admin/category/create', this.new_category).then(function (response) {
         _this2.$parent.categories.data.unshift(response.data);
         _this2.close();
         _this2.new_product = {};
@@ -61040,7 +61040,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this = this;
 
       console.log('yes');
-      axios.post('create/user', this.$data.user).then(function (response) {
+      axios.post('http://ecommerce-f.herokuapp.com/admin/create/user', this.$data.user).then(function (response) {
         _this.$parent.users.data.unshift(response.data);
         _this.close();
         _this.user = {};
@@ -61396,7 +61396,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     create_role: function create_role() {
       var _this = this;
 
-      axios.post('http://127.0.0.1:8000/admin/role/create', this.new_role).then(function (response) {
+      axios.post('http://ecommerce-f.herokuapp.com/admin/role/create', this.new_role).then(function (response) {
         console.log(response.data);
         _this.$parent.roles.data.unshift(response.data);
         _this.close();

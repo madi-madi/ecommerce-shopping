@@ -134,7 +134,7 @@
       },
 
               created(){
-            axios.get('http://127.0.0.1:8000/admin/categories').then((response)=>{
+            axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then((response)=>{
               console.info(response);
               this.categories = response.data
             }).catch((error)=>{
@@ -187,7 +187,7 @@
       // formData.append('category_id', this.product.category_id)
 
 
-            axios.post(`http://127.0.0.1:8000/admin/products/create`,formData,{
+            axios.post(`http://ecommerce-f.herokuapp.com/admin/products/create`,formData,{
                 headers:{
                 'Content-Type': 'multipart/form-data'
 

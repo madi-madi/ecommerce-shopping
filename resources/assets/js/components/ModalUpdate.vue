@@ -93,7 +93,7 @@
       },
 
               created(){
-            axios.get('http://127.0.0.1:8000/admin/categories').then((response)=>{
+            axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then((response)=>{
               console.info(response);
               this.categories = response.data
             }).catch((error)=>{})
@@ -119,7 +119,7 @@
     {
       console.log('yes');
       let formData = new FormData(document.getElementById('products'));
-            axios.patch(`http://127.0.0.1:8000/admin/product/${this.product.id}/update`,this.$data.product
+            axios.patch(`http://ecommerce-f.herokuapp.com/admin/product/${this.product.id}/update`,this.$data.product
             ).then((response)=>{
                 // console.info('Seting '+ JSON.stringify(response.data));
                 // this.settings = response.data

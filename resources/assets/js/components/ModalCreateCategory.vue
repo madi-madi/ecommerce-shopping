@@ -58,7 +58,7 @@
         this.path = window.location.pathname
 
       if (this.pathname === '/admin/categories') {
-    axios.get('http://127.0.0.1:8000/admin/categories').then((response)=>{
+    axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then((response)=>{
     console.info(response);
     this.categories = response.data
     }).catch((error)=>{
@@ -80,7 +80,7 @@
 
     create_category()
     {
-      axios.post(`http://127.0.0.1:8000/admin/category/create`,this.new_category).then((response)=>{
+      axios.post(`http://ecommerce-f.herokuapp.com/admin/category/create`,this.new_category).then((response)=>{
       this.$parent.categories.data.unshift(response.data);
       this.close();
       this.new_product = {};
