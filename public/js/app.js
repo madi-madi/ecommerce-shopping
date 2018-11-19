@@ -57598,7 +57598,7 @@ var app = new Vue({
 
             // console.log(this.products.data[ind])
 
-            axios.delete('http://127.0.0.1:8000/admin/image/' + photo.id + '/delete').then(function (response) {
+            axios.delete('http://ecommerce-f.herokuapp.com/admin/image/' + photo.id + '/delete').then(function (response) {
                 _this16.products.data[ind].images.splice(index, 1);
                 _this16.statusnativeToast("Success Deleted file from : ", products.data[ind].title, "success", 5000, "north-east");
             }).catch(function (error) {
@@ -57615,7 +57615,7 @@ var app = new Vue({
             var _this17 = this;
 
             console.log(product);
-            axios.delete('http://127.0.0.1:8000/admin/product/' + product.id + '/delete').then(function (response) {
+            axios.delete('http://ecommerce-f.herokuapp.com/admin/product/' + product.id + '/delete').then(function (response) {
                 if (window.location.pathname === '/admin/category/' + _this17.activeCategory) {
                     _this17.productsCat.data[index].deleted_at = response.data.deleted_at;
                     _this17.statusnativeToast("Success Deleted Product : ", product.title, "success", 5000, "north-east");
@@ -57630,7 +57630,7 @@ var app = new Vue({
         restoreProduct: function restoreProduct(product, index) {
             var _this18 = this;
 
-            axios.post('http://127.0.0.1:8000/admin/product/' + product.id + '/restore').then(function (response) {
+            axios.post('http://ecommerce-f.herokuapp.com/admin/product/' + product.id + '/restore').then(function (response) {
                 if (window.location.pathname === '/admin/category/' + _this18.activeCategory) {
                     console.log(_this18.productsCat.data[index].deleted_at = response.data.deleted_at);
                     _this18.statusnativeToast("Success Restored Product : ", product.title, "success", 5000, "north-east");
@@ -57646,7 +57646,7 @@ var app = new Vue({
         deleteforeverProduct: function deleteforeverProduct(product, index) {
             var _this19 = this;
 
-            axios.delete('http://127.0.0.1:8000/admin/product/' + product.id + '/deleteforever').then(function (response) {
+            axios.delete('http://ecommerce-f.herokuapp.com/admin/product/' + product.id + '/deleteforever').then(function (response) {
                 console.info(response);
                 if (window.location.pathname === '/admin/category/' + _this19.activeCategory) {
                     _this19.productsCat.data.splice(index, 1);

@@ -366,7 +366,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         deleteImage(photo , index , ind){
             // console.log(this.products.data[ind])
 
-            axios.delete(`http://127.0.0.1:8000/admin/image/${photo.id}/delete`).then((response)=>{
+            axios.delete(`http://ecommerce-f.herokuapp.com/admin/image/${photo.id}/delete`).then((response)=>{
                 this.products.data[ind].images.splice(index,1 )
       this.statusnativeToast("Success Deleted file from : ",products.data[ind].title,"success",5000 ,"north-east")
 
@@ -384,7 +384,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         // product 
         deleteProduct(product ,index){
             console.log(product);
-            axios.delete(`http://127.0.0.1:8000/admin/product/${product.id}/delete`).then((response)=>{
+            axios.delete(`http://ecommerce-f.herokuapp.com/admin/product/${product.id}/delete`).then((response)=>{
             if (window.location.pathname === '/admin/category/'+this.activeCategory) {
             this.productsCat.data[index].deleted_at = response.data.deleted_at
       this.statusnativeToast("Success Deleted Product : ",product.title,"success",5000 ,"north-east")
@@ -403,7 +403,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             }) 
         },
         restoreProduct(product ,index){
-           axios.post(`http://127.0.0.1:8000/admin/product/${product.id}/restore`).then((response)=>{
+           axios.post(`http://ecommerce-f.herokuapp.com/admin/product/${product.id}/restore`).then((response)=>{
             if (window.location.pathname === '/admin/category/'+this.activeCategory) {
             console.log(this.productsCat.data[index].deleted_at = response.data.deleted_at)
       this.statusnativeToast("Success Restored Product : ",product.title,"success",5000 ,"north-east")
@@ -422,7 +422,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
            }) 
         }, 
         deleteforeverProduct(product ,index){
-           axios.delete(`http://127.0.0.1:8000/admin/product/${product.id}/deleteforever`).then((response)=>{
+           axios.delete(`http://ecommerce-f.herokuapp.com/admin/product/${product.id}/deleteforever`).then((response)=>{
             console.info(response);
             if (window.location.pathname === '/admin/category/'+this.activeCategory) {
                 this.productsCat.data.splice(index,1)
