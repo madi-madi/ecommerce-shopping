@@ -225,7 +225,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
 
         updateSettings(){
             let formData = new FormData(document.getElementById('settings'));
-            axios.post(`settings`,formData,{
+            axios.post(` http://ecommerce-f.herokuapp.com/admin/settings`,formData,{
             headers:{
             'Content-Type': 'multipart/form-data'
 
@@ -295,7 +295,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         }, 
 
         getNotification(){
-            axios.get(`notification/admin`).then((response)=>{
+            axios.get(`http://ecommerce-f.herokuapp.com/notification/admin`).then((response)=>{
             // console.log(response.data)
             this.notification = response.data
 
