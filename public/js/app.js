@@ -57466,7 +57466,7 @@ var app = new Vue({
             var _this6 = this;
 
             var formData = new FormData(document.getElementById('settings'));
-            axios.post(' http://ecommerce-f.herokuapp.com/admin/settings', formData, {
+            axios.post('http://ecommerce-f.herokuapp.com/admin/settings', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
 
