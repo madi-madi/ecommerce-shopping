@@ -21,6 +21,10 @@ class CreateProductsTable extends Migration
             $table->integer('category_id')->unsignedin();
             $table->integer('admin_id')->unsignedin();
             $table->decimal('weight')->nullable();
+            $table->integer('product_count');
+            $table->integer('discount')->nullable();
+            $table->datetime('from')->nullable();
+            $table->datetime('to')->nullable();
             $table->SoftDeletes();
             $table->timestamps();
         });

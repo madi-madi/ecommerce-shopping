@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->increments('id');
             $table->string('category_name');
             $table->string('category_slug');
+            $table->integer('admin_id')->unsignedin();
             $table->timestamps();
         });
     }
