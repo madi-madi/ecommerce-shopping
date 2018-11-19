@@ -19,7 +19,7 @@
 //     return view('admin.home');
 // });
 // });
-Route::group(['middleware'=>'maintenance'],function(){
+// Route::group(['middleware'=>'maintenance'],function(){
 
 Route::get('/', 'frontendProductController@index');
 Route::get('verifyEmailFirst','Auth\RegisterController@verifyEmailFirst')->name('verifyEmailFirst');
@@ -30,7 +30,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-});
+// });
 
 Route::get('maintenance',function(){
         if (settings()->status == 'open') {
