@@ -47,6 +47,7 @@
     "scripts": {
         "post-install-cmd": [
             "php artisan clear-compiled",
+            "php artisan storage:link",
             "chmod -R 777 storage"
         ],
         "post-root-package-install": [
