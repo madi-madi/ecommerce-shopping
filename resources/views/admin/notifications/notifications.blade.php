@@ -29,12 +29,6 @@
     <td>@{{notification.read_at === null?'Null':notification.read_at}}</td>
     <td>@{{notification.created_at}}</td>
 
-
-{{--     <td> <a :href="'category/'+category.notify_data" @click="getProductsByCategory(category)">@{{category.category_name}}</a></td>
-    <td>@{{category.notify_data}}</td>
-    <td>@{{category.admin['name']}}</td>
-    <td><span class="text-center">@{{category.products.length}}</span></td>
-    <td>@{{category.created_at}}</td> --}}
     </tr>
     </tbody>
     <tfoot>
