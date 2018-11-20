@@ -60251,18 +60251,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
   created: function created() {
-    var _this = this;
-
     this.path = window.location.pathname;
 
-    if (this.pathname === '/admin/categories') {
-      axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then(function (response) {
-        console.info(response);
-        _this.categories = response.data;
-      }).catch(function (error) {
-        _this.errors = error.response.data.errors;
-      });
-    }
+    //   if (this.pathname === '/admin/categories') {
+    // axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then((response)=>{
+    // console.info(response);
+    // this.categories = response.data
+    // }).catch((error)=>{
+    // this.errors= error.response.data.errors;
+
+    // })
+    // }
   },
   mounted: function mounted() {},
 
@@ -60273,12 +60272,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$emit('closemodal');
     },
     create_category: function create_category() {
-      var _this2 = this;
+      var _this = this;
 
-      axios.post('http://ecommerce-f.herokuapp.com/admin/category/create', this.new_category).then(function (response) {
-        _this2.$parent.categories.data.unshift(response.data);
-        _this2.close();
-        _this2.new_product = {};
+      axios.post('category/create', this.new_category).then(function (response) {
+        _this.$parent.categories.data.unshift(response.data);
+        _this.close();
+        _this.new_product = {};
         nativeToast({
           message: 'Updated Success',
           position: 'north-east',

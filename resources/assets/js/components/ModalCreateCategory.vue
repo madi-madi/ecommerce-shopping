@@ -57,15 +57,15 @@
     created(){
         this.path = window.location.pathname
 
-      if (this.pathname === '/admin/categories') {
-    axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then((response)=>{
-    console.info(response);
-    this.categories = response.data
-    }).catch((error)=>{
-    this.errors= error.response.data.errors;
+    //   if (this.pathname === '/admin/categories') {
+    // axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then((response)=>{
+    // console.info(response);
+    // this.categories = response.data
+    // }).catch((error)=>{
+    // this.errors= error.response.data.errors;
 
-    })
-    }
+    // })
+    // }
     },
     mounted() {
     },
@@ -80,7 +80,7 @@
 
     create_category()
     {
-      axios.post(`http://ecommerce-f.herokuapp.com/admin/category/create`,this.new_category).then((response)=>{
+      axios.post(`category/create`,this.new_category).then((response)=>{
       this.$parent.categories.data.unshift(response.data);
       this.close();
       this.new_product = {};
