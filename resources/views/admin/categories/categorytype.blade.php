@@ -33,7 +33,7 @@ type="button"
     </thead>
     <tbody>
 
-    <tr v-for="(category , key) in categories.data">
+    <tr v-for="(category , key) in categories.data" v-cloak>
 
     <td>@{{category.id}}</td>
     <td> <a :href="'category/'+category.category_slug">@{{category.category_name}}</a></td>

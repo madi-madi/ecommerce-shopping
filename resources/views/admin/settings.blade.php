@@ -7,7 +7,11 @@
   <!-- /.box-header -->
   <div class="box-body">
     {{-- {!! Form::open(['url'=>aurl('settings'),'files'=>true]) !!} --}}
-    <form method="POST" action="http://127.0.0.1:8000/admin/settings" accept-charset="UTF-8" enctype="multipart/form-data" id="settings" v-on:submit.prevent="updateSettings()">
+    <form method="POST" action="http://127.0.0.1:8000/admin/settings" accept-charset="UTF-8" 
+    enctype="multipart/form-data"
+     id="settings"
+      v-on:submit.prevent="updateSettings()"
+      v-cloak >
     <div class="form-group">
       <label for="site_name_ar">{{trans('admin.site_name_ar')}}</label>
       <input name="site_name_ar" type="text" v-model="settings.site_name_ar" id="site_name_ar" class="form-control">

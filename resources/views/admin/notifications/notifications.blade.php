@@ -21,7 +21,7 @@
     </thead>
     <tbody>
 
-    <tr v-for="(notification , key) in notifications.data">
+    <tr v-for="(notification , key) in notifications.data" v-cloak>
 
     <td>@{{notification.notifiable_id}}</td>
     <td>@{{notification.type}}</td>

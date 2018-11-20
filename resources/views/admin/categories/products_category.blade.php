@@ -42,7 +42,7 @@ type="button"
     <tbody>
 
     <tr v-for="(product , key) in productsCat.data"
-    :class="{'alert alert-danger':product.deleted_at !== null}">
+    :class="{'alert alert-danger':product.deleted_at !== null}" v-cloak >
 
     <td>@{{product.id}}</td>
     <td>@{{product.title}}</td>
