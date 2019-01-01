@@ -86,9 +86,9 @@
                              <option disabled value="">{{trans.please_select_one}}</option> 
                              <option
                               v-for="category in categories"
-                             
                               :value="category.id">
                              {{category.category_name}}</option>
+
                            </select>
                             <small v-if="errors.category_id" class="text-danger">{{errors.category_id[0]}}</small>
                           </div>      
@@ -134,7 +134,7 @@
       },
 
               created(){
-            axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then((response)=>{
+            axios.get('http://127.0.0.1:8000/admin/categories').then((response)=>{
               console.info(response);
               this.categories = response.data
             }).catch((error)=>{
@@ -187,17 +187,22 @@
       // formData.append('category_id', this.product.category_id)
 
 
-            axios.post(`http://ecommerce-f.herokuapp.com/admin/products/create`,formData,{
+            axios.post(`http://127.0.0.1:8000/admin/products/create`,formData,{
                 headers:{
                 'Content-Type': 'multipart/form-data'
 
                 }
             }).then((response)=>{
-                // console.info('Seting '+ JSON.stringify(response.data));
-                // this.settings = response.data
+                console.info(this.path);
 
-                        this.$refs.files.value = null;
+                    if(this.path === "/admin/products"){
                         this.$parent.products.data.unshift(response.data);
+
+                        }else{
+                        this.$parent.productsCat.data.unshift(response.data);
+
+                        }
+                        this.$refs.files.value = null;
                         this.close();
                         this.new_product = {};
                         
@@ -220,19 +225,6 @@
 
 
        this.path = window.location.pathname
-      // switch(this.path){
-      //   case '/admin/admins':
-      //    this.url = 'admin';
-      //   this.update();
-      //   break;
-      //   case '/admin/users':
-      //    this.url = 'user';
-      //   this.update();
-      //   break;
-
-      // }
-
-
       
     },
 

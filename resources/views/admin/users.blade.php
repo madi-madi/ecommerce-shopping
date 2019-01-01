@@ -1,8 +1,8 @@
 @extends('admin.index')
 @section('content')
-<div class="box" :admin_auth="{{Request::user('admin')->id}}" v-cloak>
-    <update-user :trans="{{json_encode(trans('admin'))}}" :open-modal="showView" @closemodal="close" v-cloak ></update-user>
-    <modal-create-user :trans="{{json_encode(trans('admin'))}}"  :open-modal="showAdd"  @closemodal="close"v-cloak ></modal-create-user>
+<div class="box" :admin_auth="{{Request::user('admin')->id}}" >
+    <update-user :trans="{{json_encode(trans('admin'))}}" :open-modal="showView" @closemodal="close"  ></update-user>
+    <modal-create-user :trans="{{json_encode(trans('admin'))}}"  :open-modal="showAdd"  @closemodal="close" ></modal-create-user>
 
 
   <div class="box-header">
@@ -12,7 +12,7 @@
 class="btn btn-primary"
 @click.prevent="openCreate()"
 type="button" 
-v-cloak
+
 ><i class="fa fa-user-plus
  fa-lg" ></i>{{trans('admin.add_user')}} </button>
   </div>
@@ -86,7 +86,7 @@ v-cloak
               :pagination="users"
               @paginate="getUsers()"
               :offset="4"
-              v-cloak
+              
               ></pagination-component>
   </div>
   <!-- /.box-body -->

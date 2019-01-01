@@ -33,7 +33,7 @@ type="button"
          <tr 
           v-for="(admin , index) in admins.data" 
                  :class="{'alert alert-danger':admin.deleted_at !== null}"
-
+            v-cloak
           >
                   <td>@{{admin.id}}</td>
                   <td>@{{admin.name | capitalize}}</td>
@@ -84,32 +84,7 @@ type="button"
                   </td>
 
                 </tr>
-
-                	{{-- @endforeach --}}
-               
- {{--                <tr
-                 v-for="(user , index) in users.data"
-                 :class="{'alert alert-danger':user.deleted_at !== null}"
-                  >
-                  <td>@{{user.id}}</td>
-                  <td>@{{user.name}}
-                  </td>
-                  <td>@{{user.email}}</td>
-                  <td>@{{user.created_at}}</td>
-                  <td>
-                    <div v-if="user.deleted_at === null">
-                      <button class="btn btn-warning" @click="deleteUser(user,index)"> Delete </button>
-                    </div>
-                    <div v-else>
-                      <button class="btn btn-primary" @click="restoreUser(user,index)" > Restore </button>
-                      <button class="btn btn-danger" @click="deleteforeverUser(user,index)"> Delete for ever </button>
-                      
-                    </div>
-                    
-                  </td>
-                </tr> --}}
-            
-                                </tbody>
+                 </tbody>
                 <tfoot>
                 <tr >
                   <th>Rendering engine</th>

@@ -11,7 +11,6 @@ import nativeToast from 'native-toast'
 window.Vue = require('vue');
 // register the plugin on vue
 
-
 // you can also pass options, check options reference below
 // Vue.use(Toasted, Options)
 
@@ -110,6 +109,7 @@ const app = new Vue({
             current_page: 1
         },
         settings:[],
+        curent_category:window.location.pathname.split('/')[3],
 
     }
     },
@@ -225,13 +225,12 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
 
         updateSettings(){
             let formData = new FormData(document.getElementById('settings'));
-            axios.post(`settings`,formData,{
+            axios.post(`http://127.0.0.1:8000/admin/settings`,formData,{
             headers:{
             'Content-Type': 'multipart/form-data'
-
             }
             }).then((response)=>{
-            // console.info('Seting '+ JSON.stringify(response.data));
+            console.info('Seting '+ JSON.stringify(response.data));
             this.settings = response.data
             this.$refs.logo.value = null;
             this.$refs.icon.value = null;
@@ -245,14 +244,14 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         getAdmins(){
             // axios.get(`/admin/users?page=${this.users.current_page}`)
 
-            axios.get(`/admin/admins?page=${this.admins.current_page}`).then((response)=>{
+            axios.get(`admins?page=${this.admins.current_page}`).then((response)=>{
             this.admins = response.data;
 
             }).catch((error)=>{})
         },
         // admin 
         deleteAdmin(admin ,index){
-            axios.delete(`admin/${admin.id}/delete`).then((response)=>{
+            axios.delete(`http://127.0.0.1:8000/admin/${admin.id}/delete`).then((response)=>{
             this.admins.data[index].deleted_at = response.data.deleted_at
       this.statusnativeToast("Success Deleted : ",admin.name,"success",5000 ,"north-east")
 
@@ -263,7 +262,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             }) 
         },
         restoreAdmin(admin ,index){
-           axios.post(`admin/${admin.id}/restore`).then((response)=>{
+           axios.post(`http://127.0.0.1:8000/admin/${admin.id}/restore`).then((response)=>{
            this.admins.data[index].deleted_at = response.data.deleted_at
       this.statusnativeToast("Success Restored : ",admin.name,"success",5000 ,"north-east")
 
@@ -275,7 +274,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
            }) 
         }, 
         deleteforeverAdmin(admin ,index){
-           axios.delete(`admin/${admin.id}/deleteforever`).then((response)=>{
+           axios.delete(`http://127.0.0.1:8000/admin/${admin.id}/deleteforever`).then((response)=>{
            this.admins.data.splice(index,1)
       this.statusnativeToast("Success Deleted For Ever : ",admin.name,"success",5000 ,"north-east")
 
@@ -295,7 +294,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         }, 
 
         getNotification(){
-            axios.get(`http://ecommerce-f.herokuapp.com/notification/admin`).then((response)=>{
+            axios.get(`http://127.0.0.1:8000/admin/notification/admin`).then((response)=>{
             // console.log(response.data)
             this.notification = response.data
 
@@ -304,7 +303,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
                 getNotifications(){
             // axios.get(`/admin/users?page=${this.users.current_page}`)
 
-            axios.get(`/admin/notifications?page=${this.notifications.current_page}`).then((response)=>{
+            axios.get(`admin/notifications?page=${this.notifications.current_page}`).then((response)=>{
             console.log(response.data);
             this.notifications = response.data;
 
@@ -322,9 +321,13 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             }else if (path_request === '/admin/users') {
             this.$children[0].user= this.users.data[index] // children props
 
-            }else if (path_request === '/admin/products' ||
-             path_request === '/admin/category/'+this.activeCategory) {
-            this.$children[1].product= this.products.data[index] // children props
+            }else if (path_request === '/admin/products') {
+            
+             this.$children[1].product= this.products.data[index] // children props
+
+            }else if(path_request === 
+                '/admin/category/'+this.activeCategory){
+                this.$children[1].product= this.productsCat.data[index] // children props
 
             }
             app.showView = true;
@@ -332,7 +335,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
 
 
         getProducts() {
-            axios.get(`/admin/products?page=${this.products.current_page}`)
+            axios.get(`http://127.0.0.1:8000/admin/products?page=${this.products.current_page}`)
             .then((response) => {
             this.products = response.data;
             })
@@ -352,7 +355,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             // });                
         },
         getProductCat(){
-            axios.get(`/admin/category/${this.activeCategory}?page=${this.productsCat.current_page}`)
+            axios.get(`http://127.0.0.1:8000/admin/category/${this.activeCategory}?page=${this.productsCat.current_page}`)
             .then((response) => {
                 console.log(response.data);
             this.productsCat = response.data;
@@ -366,7 +369,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         deleteImage(photo , index , ind){
             // console.log(this.products.data[ind])
 
-            axios.delete(`http://ecommerce-f.herokuapp.com/admin/image/${photo.id}/delete`).then((response)=>{
+            axios.delete(`http://127.0.0.1:8000/admin/image/${photo.id}/delete`).then((response)=>{
                 this.products.data[ind].images.splice(index,1 )
       this.statusnativeToast("Success Deleted file from : ",products.data[ind].title,"success",5000 ,"north-east")
 
@@ -384,7 +387,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
         // product 
         deleteProduct(product ,index){
             console.log(product);
-            axios.delete(`http://ecommerce-f.herokuapp.com/admin/product/${product.id}/delete`).then((response)=>{
+            axios.delete(`http://127.0.0.1:8000/admin/product/${product.id}/delete`).then((response)=>{
             if (window.location.pathname === '/admin/category/'+this.activeCategory) {
             this.productsCat.data[index].deleted_at = response.data.deleted_at
       this.statusnativeToast("Success Deleted Product : ",product.title,"success",5000 ,"north-east")
@@ -403,7 +406,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
             }) 
         },
         restoreProduct(product ,index){
-           axios.post(`http://ecommerce-f.herokuapp.com/admin/product/${product.id}/restore`).then((response)=>{
+           axios.post(`http://127.0.0.1:8000/admin/product/${product.id}/restore`).then((response)=>{
             if (window.location.pathname === '/admin/category/'+this.activeCategory) {
             console.log(this.productsCat.data[index].deleted_at = response.data.deleted_at)
       this.statusnativeToast("Success Restored Product : ",product.title,"success",5000 ,"north-east")
@@ -422,7 +425,7 @@ this.admin_auth = document.head.querySelector('meta[name="admin"]').content;
            }) 
         }, 
         deleteforeverProduct(product ,index){
-           axios.delete(`http://ecommerce-f.herokuapp.com/admin/product/${product.id}/deleteforever`).then((response)=>{
+           axios.delete(`http://127.0.0.1:8000/admin/product/${product.id}/deleteforever`).then((response)=>{
             console.info(response);
             if (window.location.pathname === '/admin/category/'+this.activeCategory) {
                 this.productsCat.data.splice(index,1)

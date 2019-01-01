@@ -19,9 +19,12 @@
 //     return view('admin.home');
 // });
 // });
-Route::group(['middleware'=>'maintenance'],function(){
+Route::group(['middleware'=>'maintenance','web'],function(){
 
 Route::get('/', 'frontendProductController@index');
+//Route::get('/category', 'frontendProductController@getElecronic');
+Route::post('product/{id}/rate','frontendProductController@productRate');
+
 Route::get('verifyEmailFirst','Auth\RegisterController@verifyEmailFirst')->name('verifyEmailFirst');
 Route::get('verification/{email}/{verifyToken}','Auth\RegisterController@verificationDone')->name('verification');
 
@@ -37,6 +40,6 @@ Route::get('maintenance',function(){
             # code...
             return redirect('/');
         }
-	return view('style.maintenance');
+	return view('frontend.maintenance');
 });
 

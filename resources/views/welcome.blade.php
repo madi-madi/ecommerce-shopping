@@ -43,7 +43,22 @@
              nav.navbar img.logo{
                 border-radius: 50%;
              }
+         [v-cloak] > * { display:none; }
+            /*[v-cloak]::before { content: "loading..."; }
+            */
+            [v-cloak]::before { 
+            content: " ";
+            display: block;
+            width: 16px;
+            height: 16px;
+            background-image: url('data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==');
+            }
         </style>
+        <script> var user_is = <?php 
+        if(Auth::user()){
+            echo Auth::user()->id;
+        }
+         ?></script>
     </head>
     <body >
         <div class="content" id="frontend">
@@ -179,47 +194,24 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4" v-for="product in productsPhones.data" v-cloak>
                         <div class="three-item">
-                            <img src="{{url('frontend')}}/images/three-item.jpg" class="img-responsive" alt="three-item" />
+                            <img :src="'/storage/'+product.images[0].product_image" class="img-responsive" alt="three-item" />
                             <div class="three-caption text-center">
                                 <h3>
-                                    <span>Gift For</span>
-                                    <br>
-                                    HER
+                                <span>@{{product.title}}</span>
+                                    
                                 </h3>
                                 <a href="" class="btn btn-warning round-me">Shop now</a>
                             </div>
                         </div>
                     </div>
+                    <pagination-component
+                    :pagination="productsPhones"
+                    @paginate="getProductsPhones()"
+                    :offset="4"
+                    ></pagination-component>
 
-                    <div class="col-md-4">
-                        <div class="three-item">
-                            <img src="{{url('frontend')}}/images/three-item1.jpg" class="img-responsive" alt="three-item" />
-                            <div class="three-caption text-center">
-                                <h3>
-                                    <span>Gift For</span>
-                                    <br>
-                                    HIM
-                                </h3>
-                                <a href="" class="btn btn-warning round-me">Shop now</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="three-item">
-                            <img src="{{url('frontend')}}/images/three-item2.jpg" class="img-responsive" alt="three-item" />
-                            <div class="three-caption text-center">
-                                <h3>
-                                    <span>Gift For</span>
-                                    <br>
-                                    Kids & Babies
-                                </h3>
-                                <a href="" class="btn btn-warning round-me">Shop now</a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <section class="why-us">
@@ -293,7 +285,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-sm-6" v-for="product in products.data">
+                    <div class="col-md-4 col-sm-6" v-for="(product , index) in products.data" >
                         <div class="gifts-item" 
                         style="max-width: 360px; max-height:470px;background:rgb(172, 172, 172); " 
                         >
@@ -302,8 +294,29 @@
                             <div class="gifts-caption text-center">
                                 <h3>@{{product.title}}</h3>
                                 <p>
-                                    She’ll fall head over heels
-                                    dor these styles
+                                    <star-rating 
+                            @rating-selected="setCurrentRating($event ,product , index)"
+                            v-model="product.rate" 
+                            :rating= "true"
+                            :show-rating= "false"
+                            :star-size="20" 
+                            :inline="true" 
+                            :fixed-points="1"
+                            :increment="0.1"
+                            :read-only="product.rates.map((e)=> e.user_id).includes(auth_user)"
+                            v-if="auth_user && ! product.rates.map((e)=> e.user_id).includes(auth_user)"
+                            ></star-rating>
+                            <star-rating 
+                            v-model="product.rate" 
+                            :rating= "true"
+                            :show-rating= "false"
+                            :star-size="20" 
+                            :inline="true" 
+                            :fixed-points="1"
+                            :increment="0.1"
+                            :read-only="true"
+                            v-else
+                            ></star-rating>  
                                 </p>
                                 <a href="" class="btn btn-default round-me text-uppercase">SHOP NOW</a>
                             </div>
@@ -328,163 +341,54 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3 col-sm-6">
+                    <div class="col-md-3 col-sm-6" v-for="(product , index) in productsElect.data" >
                         <div class="pop-item">
-                            <img src="{{url('frontend')}}/images/popular.jpg" class="img-responsive" alt="" />
-                            <div class="sale-label"><p>Sale</p></div>
-                            <div class="new-label"><p>New</p></div>
-                            <div class="name-pro"><h3>Barney Cools Bucket Hats</h3></div>
+                            <img :src="'/storage/'+product.images[0].product_image" class="img-responsive" alt="" />
+                        <div class="sale-label"><p>@{{product.category['category_name']}}</p></div>
+                        <div class="new-label"><p>$@{{product.price}}</p></div>
                             <div class="pop-caption text-center">
-                                <p class="price">$49.99</p>
-                                <a href="" class="btn btn-me text-uppercase round-me">SHOP NOW</a>
-                            </div>
-                        </div>
-                    </div>
+                            <p class="price" >@{{product.title }}</p>
+                            <p class="rating">
+                                <star-rating 
+                            @rating-selected="setCurrentRating($event ,product , index)"
+                            v-model="product.rate" 
+                            :rating= "true"
+                            :show-rating= "false"
+                            :star-size="20" 
+                            :inline="true" 
+                            :fixed-points="1"
+                            :increment="0.1"
+                            :read-only="!product.rates.map((e)=> e.user_id).includes(auth_user)"
+                            v-if="auth_user && ! product.rates.map((e)=> e.user_id).includes(auth_user)"
+                            ></star-rating>
+                            <star-rating 
+                            v-model="product.rate" 
+                            :rating= "true"
+                            :show-rating= "false"
+                            :star-size="20" 
+                            :inline="true" 
+                            :fixed-points="1"
+                            :increment="0.1"
+                            :read-only="true"
+                            v-else
+                            ></star-rating>                            
+                                </p>
 
-                    <div class="col-md-3 col-sm-6">
-                        <div class="pop-item">
-                            <img src="{{url('frontend')}}/images/popular.jpg" class="img-responsive" alt="" />
-                            <div class="sale-label"><p>Sale</p></div>
-                            <div class="new-label"><p>New</p></div>
-                            <div class="name-pro"><h3>Camo Fang Backpack Jungle</h3></div>
-                            <div class="pop-caption text-center">
-                                <p class="price">$49.99</p>
-                                <a href="" class="btn btn-me text-uppercase round-me">SHOP NOW</a>
+                            <a href="" class="btn btn-default text-uppercase round-me">SHOP NOW</a>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-md-3 col-sm-6">
-                        <div class="pop-item">
-                            <img src="{{url('frontend')}}/images/popular1.jpg" class="img-responsive" alt="" />
-                            <div class="sale-label"><p>Sale</p></div>
-                            <div class="new-label"><p>New</p></div>
-                            <div class="name-pro"><h3>Silver Burgundy Magnus Watch</h3></div>
-                            <div class="pop-caption text-center">
-                                <p class="price">$49.99</p>
-                                <a href="" class="btn btn-me text-uppercase round-me">SHOP NOW</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-6">
-                        <div class="pop-item">
-                            <img src="{{url('frontend')}}/images/popular.jpg" class="img-responsive" alt="" />
-                            <div class="sale-label"><p>Sale</p></div>
-                            <div class="new-label"><p>New</p></div>
-                            <div class="name-pro"><h3>The Quiet Life Cap</h3></div>
-                            <div class="pop-caption text-center">
-                                <p class="price">$49.99</p>
-                                <a href="" class="btn btn-me text-uppercase round-me">SHOP NOW</a>
-                            </div>
-                        </div>
-                    </div>
-               
+                    
 
                 </div>
+                <pagination-component
+                :pagination="productsElect"
+                @paginate="getProductsEloctronic()"
+                :offset="4"
+                ></pagination-component>
+        </div>
                 {{-- <div v-for="product in products.data">@{{product.id}}</div> --}}
 
-                <div class="title1">
-                    <h4>New in today</h4>
-                </div>
-                <div class="product-slider">
-
-                    <div class="product-item">
-                        <a href="">
-                            <div class="media">
-                                <div class="media-left">
-                                    <img class="media-object" src="{{url('frontend')}}/images/product.png" alt="...">
-                                </div>
-                                <div class="media-body">
-                                    <p>
-                                        <span>Rib-knit Hat</span>
-                                        <br>
-                                        <span>New Arrival</span>
-                                    </p>
-                                    <h4 class="media-heading">$9.99</h4>
-
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="product-item">
-                        <a href="">
-                            <div class="media">
-                                <div class="media-left">
-                                    <img class="media-object" src="{{url('frontend')}}/images/product2.png" alt="...">
-                                </div>
-                                <div class="media-body">
-                                    <p>
-                                        <span>Rib-knit Hat</span>
-                                        <br>
-                                        <span>New Arrival</span>
-                                    </p>
-                                    <h4 class="media-heading">$9.99</h4>
-
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="product-item">
-                        <a href="">
-                            <div class="media">
-                                <div class="media-left">
-                                    <img class="media-object" src="{{url('frontend')}}/images/product3.png" alt="...">
-                                </div>
-                                <div class="media-body">
-                                    <p>
-                                        <span>Rib-knit Hat</span>
-                                        <br>
-                                        <span>New Arrival</span>
-                                    </p>
-                                    <h4 class="media-heading">$9.99</h4>
-
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="product-item">
-                        <a href="">
-                            <div class="media">
-                                <div class="media-left">
-                                    <img class="media-object" src="{{url('frontend')}}/images/product4.png" alt="...">
-                                </div>
-                                <div class="media-body">
-                                    <p>
-                                        <span>Rib-knit Hat</span>
-                                        <br>
-                                        <span>New Arrival</span>
-                                    </p>
-                                    <h4 class="media-heading">$9.99</h4>
-
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="product-item">
-                        <a href="">
-                            <div class="media">
-                                <div class="media-left">
-                                    <img class="media-object" src="{{url('frontend')}}/images/product2.png" alt="...">
-                                </div>
-                                <div class="media-body">
-                                    <p>
-                                        <span>Rib-knit Hat</span>
-                                        <br>
-                                        <span>New Arrival</span>
-                                    </p>
-                                    <h4 class="media-heading">$9.99</h4>
-
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
         </section>
         <!-- popular products -->
 
@@ -510,7 +414,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <img src="{{url('frontend')}}/images/girls.png" alt="" />
+                            <img  src="{{Storage::url(settings()->icon)}}" width="238px" height="300" alt="" />
                         </div>
                     </div>
 
@@ -534,7 +438,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="footer-item">
-                            <img src="{{url('frontend')}}/images/logo.png" alt="" />
+                            <img src="{{Storage::url(settings()->logo)}}" width="95" height="95" alt="" />
                             <ul>
                                 <li><a href=""><i class="fa fa-facebook fa-fw"></i></a></li>
                                 <li><a href=""><i class="fa fa-twitter fa-fw"></i></a></li>

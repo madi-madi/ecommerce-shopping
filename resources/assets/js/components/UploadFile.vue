@@ -63,7 +63,7 @@ multiple
       formData.append('product_id',this.product.prduct_id)
 
 
-            axios.post(`http://ecommerce-f.herokuapp.com/admin/upload/file/product`,formData,{
+            axios.post(`upload/file/product`,formData,{
                 headers:{
                 'Content-Type': 'multipart/form-data'
 

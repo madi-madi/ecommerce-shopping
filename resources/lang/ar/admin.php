@@ -63,8 +63,7 @@ return [
 	'create_new_user'=>'اضافة مستخدم جديد',
 	'update'=>'تحديث',
 	'title'=>'اسم المنتج',
-	'notifications'=>'اشعارات'
-
+	'notifications'=>'اشعارات',
 	''=>'',
 	''=>'',
 	''=>'',

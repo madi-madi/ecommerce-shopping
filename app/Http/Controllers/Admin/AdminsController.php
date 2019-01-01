@@ -83,9 +83,11 @@ class AdminsController extends Controller
     public function restoreAdmin($id)
     {
         // find user 
+        dd($id);
         $adminRestore = self::$admins->onlyTrashed()->find($id);
         //  restore  admin
-      $restored =  $adminRestore->restore();   
+      $restored =  $adminRestore->restore();  
+      return $restored; 
         if ($restored) {
         $getAdminRestoreed = self::$admins->withTrashed()->find($id);
         return response($getAdminRestoreed);

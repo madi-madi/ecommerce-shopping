@@ -15,7 +15,7 @@
                             <div class="form-group">
                             <label for="category_name"> Category Name</label>
                             <input type="text" title="category_name" id="category_name" name="category_name" class="form-control" v-model="new_category.category_name" >
-                            <small v-if="errors.name" class="text-danger">{{errors.name[0]}}</small>
+                            <small v-if="errors.category_name" class="text-danger">{{errors.category_name[0]}}</small>
                           </div>
                             <div class="form-group">
                             <label for="category_slug">Category Slug</label>
@@ -49,6 +49,7 @@
       path:'',
       new_category:{
       category_name:'',
+      category_slug:'',
       },
       errors:{},
       categories:[],

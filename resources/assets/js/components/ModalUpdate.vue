@@ -51,10 +51,21 @@
                             <div class="form-group col-md-6 col-xs-12">
                           <label for="category">{{trans.category}}</label>
                             <input type="hidden" name="category_id" value="1">
-                          <select  class="form-control" name="category_id" id="category" v-model="product.category_id">
+                          <select  
+                          v-if="path === '/admin/category/'+curent_category" 
+                          class="form-control" name="category_id" id="category" v-model="product.category_id">
                              <option disabled value="">{{trans.please_select_one}}</option> 
                              <option v-for="category in categories" 
                              v-if="current_category === category.category_slug"
+                             :value="category.id">
+                             {{category.category_name}}</option>
+
+                           </select>
+                          <select  
+                          v-else 
+                          class="form-control" name="category_id" id="category" v-model="product.category_id">
+                             <option disabled value="">{{trans.please_select_one}}</option> 
+                             <option v-for="category in categories" 
                              :value="category.id">
                              {{category.category_name}}</option>
 
@@ -82,18 +93,18 @@
       props:['openModal','current_category','trans'],
       data(){
         return{
-            path:'',
-            url:'',
+            path:window.location.pathname,
+            url:window.location.origin,
             product:{},
             errors:{},
-
+            curent_category:window.location.pathname.split('/')[3],
             categories:[],
             
         }
       },
 
               created(){
-            axios.get('http://ecommerce-f.herokuapp.com/admin/categories').then((response)=>{
+            axios.get('http://127.0.0.1:8000/admin/categories').then((response)=>{
               console.info(response);
               this.categories = response.data
             }).catch((error)=>{})
@@ -119,7 +130,7 @@
     {
       console.log('yes');
       let formData = new FormData(document.getElementById('products'));
-            axios.patch(`http://ecommerce-f.herokuapp.com/admin/product/${this.product.id}/update`,this.$data.product
+            axios.patch(`${this.url}/admin/product/${this.product.id}/update`,this.$data.product
             ).then((response)=>{
                 // console.info('Seting '+ JSON.stringify(response.data));
                 // this.settings = response.data

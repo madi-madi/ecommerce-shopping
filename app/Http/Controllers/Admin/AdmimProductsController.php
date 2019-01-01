@@ -53,7 +53,7 @@ class AdmimProductsController extends Controller
     public function createCategory()
     {
         // return request()->all();
-        $this->validate(request(),[
+    $data =     $this->validate(request(),[
             'category_name'=>'required',
             'category_slug'=>'required',
         ],[
@@ -61,12 +61,23 @@ class AdmimProductsController extends Controller
             'category_slug'=>trans('admin.category_slug'),            
         ],[]);
 
-        $create_category = self::$categories->create([
-            'category_name'=>request('category_name'),
-            'category_slug'=>request('category_slug'),
 
-        ]);
-        return response($create_category);
+        if ( self::$categories
+        ->where('category_name','=',$data['category_name'])
+        ->where('category_slug','=',$data['category_slug'])
+        ->count() === 0) {
+            $create_category = self::$categories->create([
+                'category_name'=>request('category_name'),
+                'category_slug'=>request('category_slug'),
+                'admin_id'=>Auth::guard('admin')->user()->id,
+    
+            ]);
+            $latestCat = self::$categories->with('admin')->with('products')->find($create_category->id);
+            return response($latestCat);
+        }
+
+         //   return Redirect::withErrors(['msg'=>'the Record has found']);
+          return response()->json(["Exist Record", 400],400 );
 
     }
 
@@ -201,7 +212,7 @@ class AdmimProductsController extends Controller
 
     public function deleteProduct($id)
     {
-        // dd($id);
+         //dd($id);
         // find user 
         $productDelete = self::$products->find($id);
         //  delet admin

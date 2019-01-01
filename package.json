@@ -24,6 +24,7 @@
         "laravel-echo": "^1.4.0",
         "native-toast": "^2.0.0",
         "pusher-js": "^4.3.1",
+        "vue-star-rating": "^1.6.1",
         "vue-toasted": "^1.1.24"
     }
 }

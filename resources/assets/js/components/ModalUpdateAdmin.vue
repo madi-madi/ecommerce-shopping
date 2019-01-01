@@ -85,7 +85,7 @@
     // }
     // },
     update_data(){
-      axios.patch(`http://ecommerce-f.herokuapp.com/admin/${this.admin.id}/update`,this.$data.admin).then((response)=>{
+      axios.patch(`admin/${this.admin.id}/update`,this.$data.admin).then((response)=>{
           console.info(response.status);
           this.close();
           nativeToast({

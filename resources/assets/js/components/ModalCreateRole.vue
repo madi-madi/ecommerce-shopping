@@ -78,7 +78,7 @@
 
     create_role()
     {
-      axios.post(`http://ecommerce-f.herokuapp.com/admin/role/create`,this.new_role).then((response)=>{
+      axios.post(`role/create`,this.new_role).then((response)=>{
         console.log(response.data);
       this.$parent.roles.data.unshift(response.data);
       this.close();

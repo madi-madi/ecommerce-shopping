@@ -82,7 +82,7 @@
 <li class="dropdown notifications-menu">
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 <i class="fa fa-bell-o"></i>
-<span class="label label-warning">@{{notification.length}}</span>
+<span class="label label-warning" v-cloak > @{{notification.length}} </span>
 </a>
 <ul class="dropdown-menu">
 {{-- <li class="header" >New User  with name : <b> @{{notify.user_name}} </b></li> --}}

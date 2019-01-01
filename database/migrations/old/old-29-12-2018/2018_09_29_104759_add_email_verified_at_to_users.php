@@ -14,8 +14,7 @@ class AddEmailVerifiedAtToUsers extends Migration
         public function up()
     {
     Schema::table('users', function($table) {
-        $table->string('verify_token');
-        $table->boolean('status');
+        $table->SoftDeletes();
 
     });
     }
@@ -28,8 +27,7 @@ class AddEmailVerifiedAtToUsers extends Migration
     public function down()
     {
         Schema::table('users', function($table) {
-        $table->dropColumn('verify_token');
-        $table->dropColumn('status');
+            $table->dropSoftDeletes();
 
     });
     }

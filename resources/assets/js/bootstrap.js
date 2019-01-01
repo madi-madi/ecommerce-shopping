@@ -9,7 +9,7 @@ window.Popper = require('popper.js').default;
  */
 
 try {
-    // window.$ = window.jQuery = require('jquery');
+    window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
 } catch (e) {}
@@ -53,5 +53,5 @@ window.Echo = new Echo({
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
     encrypted: true,
-    authEndpoint: 'http://ecommerce-f.herokuapp.com/broadcasting/auth'
+    authEndpoint: 'http://127.0.0.1:8000/broadcasting/auth'
 });

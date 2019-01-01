@@ -32,7 +32,7 @@ type="button"
 
     <tr v-for="(category , key) in categories.data" v-cloak>
 
-    <td>@{{  }}category.id}}</td>
+    <td>@{{ category.id }}</td>
     <td> <a :href="'category/'+category.category_slug" @click="getProductsByCategory(category)">@{{category.category_name}}</a></td>
     <td>@{{category.category_slug}}</td>
     <td>@{{category.admin['name']}}</td>

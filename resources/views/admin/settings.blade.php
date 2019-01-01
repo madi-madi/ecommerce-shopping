@@ -7,7 +7,7 @@
   <!-- /.box-header -->
   <div class="box-body">
     {{-- {!! Form::open(['url'=>aurl('settings'),'files'=>true]) !!} --}}
-    <form method="POST" action="http://127.0.0.1:8000/admin/settings" accept-charset="UTF-8" 
+    <form method="POST"  accept-charset="UTF-8" 
     enctype="multipart/form-data"
      id="settings"
       v-on:submit.prevent="updateSettings()"

@@ -15,6 +15,11 @@ class Maintenance
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        if (settings()->status == 'close') {
+            return  redirect('maintenance');
+        }
+    return $next($request);
+
     }
+
 }
